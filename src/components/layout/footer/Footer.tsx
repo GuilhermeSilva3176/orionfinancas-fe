@@ -7,8 +7,8 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.linksGrid}>
         <div className={styles.column}>
-          <Link href="/services" className={styles.link}>produtos e serviços</Link>
-          <Link href="/contact" className={styles.link}>Central de atendimento</Link>
+          <Link href="/userservices" className={styles.link}>produtos e serviços</Link>
+          <Link href="/help" className={styles.link}>Central de atendimento</Link>
         </div>
 
         <div className={styles.column}>

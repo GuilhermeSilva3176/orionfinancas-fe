@@ -15,7 +15,7 @@ export function Header() {
               Sobre
             </Link>
 
-            <Link href="/services" className={styles.navLink}>
+            <Link href="/userservices" className={styles.navLink}>
               Serviços
             </Link>
 
