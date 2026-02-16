@@ -1,0 +1,51 @@
+.header {
+  background: var(--dark-surface);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.logoText {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navLink {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: var(--primary-color);
+}
+
+.btnLogin {
+  color: var(--primary-color);
+}
+
+.btnLogin:hover {
+  opacity: 0.8;
+}
