@@ -72,7 +72,7 @@ export default function RegisterPage() {
 
         <Button
           variant="secondary"
-          onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+          onClick={() => signIn('google', { callbackUrl: '/learning' })}
         >
           <Image
             src="https://authjs.dev/img/providers/google.svg"
