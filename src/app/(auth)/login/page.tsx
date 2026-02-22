@@ -42,7 +42,7 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <Button type="submit" variant="primary" onClick={() => window.location.href = '/dashboard'}>
+          <Button type="submit" variant="primary" onClick={() => window.location.href = '/learning'}>
             Entrar →
           </Button>
         </form>
@@ -53,7 +53,7 @@ export default function LoginPage() {
 
         <Button
           variant="social"
-          onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+          onClick={() => signIn('google', { callbackUrl: '/learning' })}
         >
           <Image
             src="https://authjs.dev/img/providers/google.svg"

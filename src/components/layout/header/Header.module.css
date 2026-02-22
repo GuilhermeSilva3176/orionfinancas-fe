@@ -5,36 +5,38 @@
   height: var(--header-height);
   background: var(--dark-surface);
   border-bottom: 1px solid var(--border-color);
-}
-
-.public {
-  background: transparent;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .logged {
   background: var(--dark-surface);
 }
 
+
 /* =========================
    CONTAINER
 ========================= */
 .container {
   height: 100%;
-  padding: 20 2rem;
+  padding: 0 2rem;
 
   display: flex;
   align-items: center;
 }
 
 .public .container {
-  max-width: 1200px;
+  max-width: 2000px;
   margin: 0 auto;
 }
 
 .logged .container {
   width: 100%;
-  max-width: none;
+  max-width: 2000px;
+  margin: 0 auto;
 }
+
 
 /* =========================
    CONTEÚDO
@@ -87,7 +89,7 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .iconBtn {
@@ -95,12 +97,6 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: var(--text-primary);
-  transition: color 0.2s ease;
-}
-
-.iconBtn:hover {
-  color: var(--primary-color);
 }
 
 .avatar {
