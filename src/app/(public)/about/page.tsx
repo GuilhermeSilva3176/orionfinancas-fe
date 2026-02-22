@@ -1,30 +1,32 @@
-import styles from '../InfoPages.module.css';
+import styles from './About.module.css';
 
 export default function AboutPage() {
   return (
-    <div className={styles.infoContainer}>
-      <h1 className={styles.title}>Sobre Nós</h1>
-      <div className={styles.content}>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tincidunt, dui eu semper aliquet, enim sapien interdum libero, a accumsan magna arcu sit amet ligula. Duis efficitur hendrerit risus non tempus.
+    <div className={styles.aboutContainer}>
+      <section className={styles.heroAbout}>
+        <h1 className={styles.title}>Nossa Missão no <span className="highlight">Orion</span></h1>
+        <p className={styles.subtitle}>
+          Capacitando a nova geração com as ferramentas necessárias para a liberdade financeira.
         </p>
-        <br />
-        <p>
-          Ut accumsan viverra libero, at egestas justo rhoncus ac. Nulla in ligula erat. Proin sed blandit turpis, ac accumsan mauris. Nunc et dolor eu ligula tincidunt tempus quis iaculis dolor.
-        </p>
-        <br />
-        <p>
-          Ut accumsan viverra libero, at egestas justo rhoncus ac. Nulla in ligula erat. Proin sed blandit turpis, ac accumsan mauris. Nunc et dolor eu ligula tincidunt tempus quis iaculis dolor.
-        </p>
-        <br />
-        <p>
-          Ut accumsan viverra libero, at egestas justo rhoncus ac. Nulla in ligula erat. Proin sed blandit turpis, ac accumsan mauris. Nunc et dolor eu ligula tincidunt tempus quis iaculis dolor.
-        </p>
-        <br />
-        <p>
-          Ut accumsan viverra libero, at egestas justo rhoncus ac. Nulla in ligula erat. Proin sed blandit turpis, ac accumsan mauris. Nunc et dolor eu ligula tincidunt tempus quis iaculis dolor.
-        </p>
-      </div>
+      </section>
+
+      <section className={styles.contentGrid}>
+        <div className={styles.card}>
+          <h3>Quem Somos?</h3>
+          <p>
+            O Orion Finanças nasceu da necessidade de transformar a educação financeira 
+            em algo acessível, prático e moderno para jovens que estão começando sua jornada.
+          </p>
+        </div>
+
+        <div className={styles.card}>
+          <h3>Nosso Propósito</h3>
+          <p>
+            Acreditamos que o controle do dinheiro é a base para a realização de sonhos. 
+            Nossa plataforma simplifica a gestão de gastos e ensina investimentos de forma clara.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
