@@ -9,6 +9,8 @@
   --text-primary: #F8FAFC;
   --text-secondary: #CBD5E1;
   --text-muted: #94A3B8;
+
+  --header-height: 70px;
 }
 
 * {
@@ -77,7 +79,7 @@ main {
 }
 
 .form-link {
- color: var(--primary-color);
+  color: var(--primary-color);
   text-align: left;
   font-size: 0.9rem;
   font-weight: 500;
@@ -86,6 +88,6 @@ main {
 }
 
 .form-link:hover {
- opacity: 0.8;
+  opacity: 0.8;
   text-decoration: underline;
 }

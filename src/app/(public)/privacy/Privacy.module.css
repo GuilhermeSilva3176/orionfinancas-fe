@@ -1,12 +1,12 @@
 .privacyContainer {
   max-width: 800px;
   margin: 0 auto;
-  padding: 4rem 1.5rem;
+  padding: 1rem 1.5rem;
 }
 
 .privacyHeader {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
 }
 
 .title {

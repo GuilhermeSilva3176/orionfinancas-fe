@@ -1,33 +1,69 @@
+/* =========================
+   HEADER BASE
+========================= */
 .header {
+  height: var(--header-height);
   background: var(--dark-surface);
   border-bottom: 1px solid var(--border-color);
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem 2rem;
+.public {
+  background: transparent;
 }
 
+.logged {
+  background: var(--dark-surface);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+  height: 100%;
+  padding: 20 2rem;
+
+  display: flex;
+  align-items: center;
+}
+
+.public .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logged .container {
+  width: 100%;
+  max-width: none;
+}
+
+/* =========================
+   CONTEÚDO
+========================= */
 .headerContent {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* =========================
+   LOGO
+========================= */
 .logo {
   text-decoration: none;
-  color: inherit;
   display: flex;
   align-items: center;
 }
 
 .logoText {
-  font-weight: bold;
+  font-weight: 800;
   font-size: 1.2rem;
   color: var(--primary-color);
 }
 
+/* =========================
+   NAV (HEADER PÚBLICO)
+========================= */
 .nav {
   display: flex;
   gap: 1.5rem;
@@ -36,6 +72,8 @@
 .navLink {
   color: var(--text-secondary);
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .navLink:hover {
@@ -46,6 +84,85 @@
   color: var(--primary-color);
 }
 
-.btnLogin:hover {
-  opacity: 0.8;
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.iconBtn:hover {
+  color: var(--primary-color);
+}
+
+.avatar {
+  background: var(--dark-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.dropdownWrapper {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.75rem);
+
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+
+  min-width: 220px;
+  padding: 0.75rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  z-index: 200;
+}
+
+.dropdownTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.dropdownItem {
+  background: none;
+  border: none;
+
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.dropdownItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--primary-color);
 }

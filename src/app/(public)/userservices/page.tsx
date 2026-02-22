@@ -1,18 +1,41 @@
-
-import styles from '../InfoPages.module.css';
+import styles from './Services.module.css';
 
 export default function ServicesPage() {
+  const services = [
+    {
+      title: "Gestão de Gastos",
+      description: "Registre suas despesas diárias de forma intuitiva e categorize seus gastos para entender para onde seu dinheiro está indo."
+    },
+    {
+      title: "Trilhas de Aprendizado",
+      description: "Conteúdo educativo exclusivo para jovens, cobrindo desde o básico da poupança até o funcionamento do mercado de ações."
+    },
+    {
+      title: "Planejador de Metas",
+      description: "Defina objetivos financeiros (como uma viagem ou reserva de emergência) e acompanhe seu progresso em tempo real."
+    },
+    {
+      title: "Relatórios Inteligentes",
+      description: "Visualize sua saúde financeira através de gráficos claros e receba insights sobre como economizar mais no final do mês."
+    }
+  ];
+
   return (
-    <div className={styles.infoContainer}>
-      <h1 className={styles.title}>Produtos e Serviços</h1>
-      <div className={styles.content}>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tincidunt, dui eu semper aliquet, enim sapien interdum libero, a accumsan magna arcu sit amet ligula. Duis efficitur hendrerit risus non tempus. Ut accumsan viverra libero, at egestas justo rhoncus ac.
+    <div className={styles.servicesContainer}>
+      <header className={styles.servicesHeader}>
+        <h1 className={styles.title}>Nossos <span className="highlight">Serviços</span></h1>
+        <p className={styles.subtitle}>
+          Tudo o que você precisa para sair do zero e alcançar sua independência financeira.
         </p>
-        <br />
-        <p>
-          Nulla in ligula erat. Proin sed blandit turpis, ac accumsan mauris. Nunc et dolor eu ligula tincidunt tempus quis iaculis dolor. Nullam non rhoncus ex.
-        </p>
+      </header>
+
+      <div className={styles.servicesGrid}>
+        {services.map((service, index) => (
+          <div key={index} className={styles.serviceCard}>
+            <h3>{service.title}</h3>
+            <p>{service.description}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
