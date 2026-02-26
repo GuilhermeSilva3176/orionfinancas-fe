@@ -1,8 +1,22 @@
+'use client';
+
 import { Footer } from '@/components/layout/footer/Footer';
 import { Header } from '@/components/layout/header/Header';
 import styles from './UserLayout.module.css';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 export default function UserLayout({ children }: { children: React.ReactNode }) {
+    const pathname = usePathname();
+
+    const navItems = [
+        { href: '/finances', label: '💼 Finanças' },
+        { href: '/learning', label: '📚 Aprender' },
+        { href: '/missions', label: '🎯 Missões' },
+        { href: '/goals', label: '🏆 Metas' },
+        { href: '/shop', label: '🛒 Loja' },
+    ];
+
     return (
         <div className={styles.userWrapper}>
             <Header variant="logged" />
@@ -11,11 +25,18 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
             <div className={styles.appLayout}>
                 <aside className={styles.sidebarLeft}>
                     <nav className={styles.sidebarNav}>
-                        <a href="/finances" className={styles.navItem}>💼 Finanças</a>
-                        <a href="/learning" className={`${styles.navItem} ${styles.active}`}>📚 Aprender</a>
-                        <a href="/missions" className={styles.navItem}>🎯 Missões</a>
-                        <a href="/goals" className={styles.navItem}>🏆 Metas</a>
-                        <a href="/shop" className={styles.navItem}>🛒 Loja</a>
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`${styles.navItem} ${pathname === item.href || pathname.startsWith(item.href + '/')
+                                        ? styles.active
+                                        : ''
+                                    }`}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
                     </nav>
                 </aside>
 
