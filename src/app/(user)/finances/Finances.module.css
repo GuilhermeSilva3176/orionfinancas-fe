@@ -1,0 +1,431 @@
+.financesContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    padding: 2rem 0;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pageTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.balanceText {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.chartContainer {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chartLabels {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.label {
+    position: absolute;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Positioning labels */
+.labelGastos {
+    bottom: 15%;
+    right: 15%;
+}
+
+.labelMetas {
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+}
+
+.labelGanhos {
+    top: 15%;
+    right: 15%;
+}
+
+.detailsBtn {
+    margin-top: 3rem;
+    background: var(--text-secondary);
+    /* Grey as per wireframe */
+    color: var(--dark-bg);
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.detailsBtn:hover {
+    background: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+/* =========
+   RECORDS LIST
+   ========= */
+.recordsContainer {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.recordsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.recordsHeaderText {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.recordsHeaderActions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.recordsTitle {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.recordsSubtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+.addRecordBtn {
+    background: var(--text-primary);
+    color: var(--dark-bg);
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.addRecordBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.backToOverview {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: all 0.2s;
+}
+
+.backToOverview:hover {
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.recordsSummary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.summaryCard {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 16px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.summaryLabel {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.summaryValue {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* =========
+   OVERVIEW SUMMARY ON CHART PAGE
+   ========= */
+.overviewSummary {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.overviewCard {
+    background: var(--dark-surface);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.overviewLabel {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.overviewValue {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* layout: chart + summary side by side */
+.topRow {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.tableCard {
+    background: var(--dark-surface);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem 1.75rem;
+}
+
+.tableHeaderRow {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr 1.2fr 1.1fr;
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tableBody {
+    display: flex;
+    flex-direction: column;
+}
+
+.tableRow {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr 1.2fr 1.1fr;
+    padding: 0.9rem 0;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.tableRow:last-child {
+    border-bottom: none;
+}
+
+.typeCell {
+    font-weight: 600;
+}
+
+/* =========
+   RECORD FORM
+   ========= */
+.formCard {
+    background: var(--dark-surface);
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+}
+
+.financeForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: 1.3fr 1.3fr;
+    gap: 1.2rem;
+}
+
+.formGroupInline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.formGroupInline label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.formInput {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.inlineValueGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.currencyPrefix {
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+}
+
+.formActions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.secondaryBtnWide,
+.primaryBtnWide {
+    flex: 1;
+    text-align: center;
+    padding: 0.9rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.secondaryBtnWide {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+}
+
+.secondaryBtnWide:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.primaryBtnWide {
+    background: var(--primary-color);
+    color: var(--dark-bg);
+}
+
+.primaryBtnWide:hover {
+    background: var(--primary-light);
+    transform: translateY(-1px);
+}
+
+/* =========
+   RECORD MODAL
+   ========= */
+.recordModalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.recordModalContent {
+    background: var(--dark-surface);
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    padding: 2rem 2.25rem;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.recordModalTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .recordsHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .recordsHeaderActions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .topRow {
+        flex-direction: column;
+    }
+
+    .formRow {
+        grid-template-columns: 1fr;
+    }
+
+    .tableHeaderRow,
+    .tableRow {
+        grid-template-columns: 1.2fr 1.6fr 1.1fr 1.2fr;
+    }
+
+    .recordsSummary,
+    .overviewSummary {
+        grid-template-columns: 1fr;
+    }
+}
