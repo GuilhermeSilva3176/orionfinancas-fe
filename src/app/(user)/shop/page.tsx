@@ -9,11 +9,12 @@ export default function ShopPage() {
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
     const shopItems = [
-        { id: 1, name: "Ícone de Perfil", price: 500, type: "icon" },
-        { id: 2, name: "Ícone de Perfil", price: 800, type: "icon" },
-        { id: 3, name: "Roupa Personagem", price: 1200, type: "skin" },
-        { id: 4, name: "Ícone de Perfil", price: 300, type: "icon" },
-        { id: 5, name: "Ícone de Perfil", price: 600, type: "icon" },
+        { id: 1, name: "Ícone Clássico", price: 300, type: "icon", img: "/images/avatar.png" },
+        { id: 2, name: "Ninja das Finanças", price: 500, type: "icon", img: "/images/avatar1.png" },
+        { id: 3, name: "Socialite", price: 800, type: "icon", img: "/images/avatar2.png" },
+        { id: 4, name: "Master Invest", price: 1200, type: "icon", img: "/images/avatar3.png" },
+        { id: 5, name: "Punk Rock", price: 600, type: "icon", img: "/images/avatar4.png" },
+        { id: 6, name: "Astronauta", price: 1500, type: "icon", img: "/images/avatar5.png" },
     ];
 
     const handleBuyClick = (item: any) => {
@@ -52,8 +53,8 @@ export default function ShopPage() {
             <div className={styles.shopGrid}>
                 {shopItems.map((item) => (
                     <div key={item.id} className={styles.itemCard}>
-                        <div className={styles.imagePlaceholder}>
-                            {item.type === 'skin' ? 'Roupa para o personagem' : 'Ícone de perfil'}
+                        <div className={styles.imageContainer}>
+                            <img src={item.img} alt={item.name} className={styles.itemImg} />
                         </div>
 
                         <div className={styles.itemInfo}>
@@ -77,7 +78,7 @@ export default function ShopPage() {
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <div className={styles.modalHeader}>
                             <div className={styles.modalIcon}>
-                                {selectedItem.type === 'skin' ? '👕' : '👤'}
+                                <img src={selectedItem.img} alt={selectedItem.name} className={styles.modalImg} />
                             </div>
                             <h3 className={styles.modalTitle}>{selectedItem.name}</h3>
                         </div>
