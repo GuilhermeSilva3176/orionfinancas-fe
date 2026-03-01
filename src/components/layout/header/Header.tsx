@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Bell, User } from 'lucide-react';
 import styles from './Header.module.css';
 import { useState, useRef, useEffect } from "react"
 
@@ -76,7 +77,7 @@ export function Header({ variant = 'public' }: HeaderProps) {
                   className={styles.iconBtn}
                   onClick={() => setIsNotificationsOpen((prev) => !prev)}
                 >
-                  🔔
+                  <Bell size={20} />
                 </button>
 
                 {isNotificationsOpen && (
@@ -111,8 +112,17 @@ export function Header({ variant = 'public' }: HeaderProps) {
                 )}
               </div>
 
-              <Link href="/profile" className={styles.iconBtn}>
-                👤
+              <Link href="/profile" className={styles.avatar}>
+                <img
+                  src="/images/avatar.png?v=2"
+                  alt="Perfil"
+                  className={styles.avatarImg}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.nextElementSibling?.setAttribute('style', 'display: block');
+                  }}
+                />
+                <User size={24} style={{ display: 'none' }} />
               </Link>
             </div>
           )}
