@@ -18,7 +18,15 @@ export default function GoalsPage() {
         { id: 6, title: "Economizar dinheiro do almoço", current: 13.00, target: 75.00 },
     ]);
 
-    const [newGoal, setNewGoal] = useState({ title: '', target: '' });
+    const [newGoal, setNewGoal] = useState({
+        title: '',
+        target: '',
+        date: '',
+        description: '',
+        urgency: 'medium',
+    });
+
+    const currentBalance = 1500.00;
 
     const handleAddGoal = (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,11 +36,20 @@ export default function GoalsPage() {
             id: goals.length + 1,
             title: newGoal.title,
             current: 0,
-            target: parseFloat(newGoal.target)
+            target: parseFloat(newGoal.target),
+            date: newGoal.date,
+            description: newGoal.description,
+            urgency: newGoal.urgency,
         };
 
         setGoals([...goals, goal]);
-        setNewGoal({ title: '', target: '' });
+        setNewGoal({
+            title: '',
+            target: '',
+            date: '',
+            description: '',
+            urgency: 'medium',
+        });
         setIsModalOpen(false);
     };
 
@@ -109,11 +126,47 @@ export default function GoalsPage() {
             {isModalOpen && (
                 <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <h3 className={styles.modalTitle}>Nova Meta</h3>
+                        <h3 className={styles.modalTitle}>Cadastro de Meta</h3>
+
+                        <div className={styles.goalModalHeaderRow}>
+                            <div className={styles.balanceBox}>
+                                <span className={styles.balanceLabel}>Saldo atual</span>
+                                <span className={styles.balanceValue}>
+                                    R$ {currentBalance.toFixed(2).replace('.', ',')}
+                                </span>
+                            </div>
+
+                            <div className={styles.urgencyBox}>
+                                <span className={styles.urgencyLabel}>Urgência</span>
+                                <div className={styles.urgencyOptions}>
+                                    <button
+                                        type="button"
+                                        className={`${styles.urgencyPill} ${styles.urgencyLow} ${newGoal.urgency === 'low' ? styles.urgencySelected : ''}`}
+                                        onClick={() => setNewGoal({ ...newGoal, urgency: 'low' })}
+                                    >
+                                        Baixa
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`${styles.urgencyPill} ${styles.urgencyMedium} ${newGoal.urgency === 'medium' ? styles.urgencySelected : ''}`}
+                                        onClick={() => setNewGoal({ ...newGoal, urgency: 'medium' })}
+                                    >
+                                        Média
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`${styles.urgencyPill} ${styles.urgencyHigh} ${newGoal.urgency === 'high' ? styles.urgencySelected : ''}`}
+                                        onClick={() => setNewGoal({ ...newGoal, urgency: 'high' })}
+                                    >
+                                        Alta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
 
                         <form onSubmit={handleAddGoal}>
                             <div className={styles.formGroup}>
-                                <label>Nome da Meta</label>
+                                <label>Meta</label>
                                 <input
                                     type="text"
                                     className={styles.formInput}
@@ -125,7 +178,7 @@ export default function GoalsPage() {
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label>Valor Alvo (R$)</label>
+                                <label>Valor (R$)</label>
                                 <input
                                     type="number"
                                     step="0.01"
@@ -134,6 +187,27 @@ export default function GoalsPage() {
                                     value={newGoal.target}
                                     onChange={(e) => setNewGoal({ ...newGoal, target: e.target.value })}
                                     required
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label>Data (caso exista uma)</label>
+                                <input
+                                    type="date"
+                                    className={styles.formInput}
+                                    value={newGoal.date}
+                                    onChange={(e) => setNewGoal({ ...newGoal, date: e.target.value })}
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label>Descrição</label>
+                                <textarea
+                                    className={styles.formInput}
+                                    rows={3}
+                                    placeholder="Detalhe rapidamente o porquê dessa meta."
+                                    value={newGoal.description}
+                                    onChange={(e) => setNewGoal({ ...newGoal, description: e.target.value })}
                                 />
                             </div>
 
@@ -159,7 +233,7 @@ export default function GoalsPage() {
                 <div className={styles.modalOverlay} onClick={() => setIsDepositModalOpen(false)}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                         <h3 className={styles.modalTitle}>Abastecer Meta</h3>
-                        <p style={{ textAlign: 'center', marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
+                        <p className={styles.depositText}>
                             Quanto deseja adicionar para <strong>{selectedGoal?.title}</strong>?
                         </p>
 
@@ -186,7 +260,10 @@ export default function GoalsPage() {
                                 >
                                     Cancelar
                                 </button>
-                                <button type="submit" className={styles.confirmBtn} style={{ background: '#fbbf24', color: '#000' }}>
+                                <button
+                                    type="submit"
+                                    className={`${styles.confirmBtn} ${styles.confirmDepositBtn}`}
+                                >
                                     Confirmar
                                 </button>
                             </div>

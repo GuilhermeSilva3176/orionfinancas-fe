@@ -67,6 +67,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 .cardInfo {
@@ -131,11 +132,18 @@
     background: var(--dark-surface);
     border: 1px solid var(--border-color);
     width: 100%;
-    max-width: 450px;
+    max-width: 620px;
     border-radius: 24px;
-    padding: 2.5rem;
+    padding: 2.25rem 2.75rem;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     animation: modalSlideUp 0.3s ease-out;
+}
+
+@media (max-width: 768px) {
+    .modalContent {
+        max-width: 100%;
+        padding: 2rem 1.5rem;
+    }
 }
 
 @keyframes modalSlideUp {
@@ -154,8 +162,15 @@
     font-size: 1.6rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 2rem;
+    margin-bottom: 1.25rem;
     text-align: center;
+}
+
+.depositText {
+    text-align: center;
+    margin-bottom: 1.75rem;
+    color: var(--text-secondary);
+    font-size: 0.98rem;
 }
 
 .formGroup {
@@ -225,27 +240,123 @@
     transform: scale(1.02);
 }
 
-.depositBtn {
-    background: rgba(251, 191, 36, 0.1);
-    border: 1px solid rgba(251, 191, 36, 0.2);
-    color: #fbbf24;
-    padding: 0 1.2rem;
-    height: 45px;
+.confirmDepositBtn {
+    background: linear-gradient(135deg, #facc15, #f97316);
+    color: #111827;
+}
+
+.confirmDepositBtn:hover {
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+}
+
+/* =========
+   GOALS MODAL LAYOUT
+   ========= */
+.goalModalHeaderRow {
+    display: grid;
+    grid-template-columns: 1.1fr 1.2fr;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    align-items: stretch;
+}
+
+.balanceBox {
+    background: rgba(255, 255, 255, 0.04);
     border-radius: 12px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.balanceLabel {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.balanceValue {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.urgencyBox {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.urgencyLabel {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.urgencyOptions {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.urgencyPill {
+    flex: 1;
+    border-radius: 999px;
+    border: none;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--dark-bg);
+    opacity: 0.7;
+    transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
+}
+
+.urgencyLow {
+    background: #22c55e;
+}
+
+.urgencyMedium {
+    background: #eab308;
+}
+
+.urgencyHigh {
+    background: #ef4444;
+}
+
+.urgencyPill:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.urgencySelected {
+    opacity: 1;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.depositBtn {
+    background: linear-gradient(135deg, #facc15, #f97316);
+    border: none;
+    color: #111827;
+    padding: 0 1.6rem;
+    height: 44px;
+    border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 700;
     transition: all 0.2s;
     margin-left: 1rem;
     white-space: nowrap;
+    position: relative;
+    z-index: 1;
 }
 
 .depositBtn:hover {
-    background: #fbbf24;
-    color: var(--dark-bg);
-    transform: scale(1.1);
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(250, 204, 21, 0.35);
 }

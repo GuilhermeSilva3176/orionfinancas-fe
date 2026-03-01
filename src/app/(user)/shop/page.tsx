@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from 'react';
+import { SubscriptionModal } from '@/components/shop/SubscriptionModal';
 import styles from './Shop.module.css';
 
 export default function ShopPage() {
     const [selectedItem, setSelectedItem] = useState<any>(null);
+    const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
     const shopItems = [
         { id: 1, name: "Ícone de Perfil", price: 500, type: "icon" },
@@ -31,10 +33,21 @@ export default function ShopPage() {
 
     return (
         <div className={styles.shopContainer}>
-            <div className={styles.banner}>
+            <div
+                className={styles.banner}
+                onClick={() => setIsSubscriptionModalOpen(true)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && setIsSubscriptionModalOpen(true)}
+            >
                 <h2 className={styles.bannerTitle}>PLANO DE ASSINATURA</h2>
                 <p className={styles.bannerSubtitle}>Desbloqueie conteúdos exclusivos!</p>
             </div>
+
+            <SubscriptionModal
+                isOpen={isSubscriptionModalOpen}
+                onClose={() => setIsSubscriptionModalOpen(false)}
+            />
 
             <div className={styles.shopGrid}>
                 {shopItems.map((item) => (
