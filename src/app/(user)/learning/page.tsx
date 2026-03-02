@@ -4,7 +4,16 @@ import { Fragment, useState } from "react";
 import styles from "./Learning.module.css";
 import { LEARNING_DOCUMENT, getModuleById } from "./lessonsData";
 
-const MODULOS = [
+type ModuleStatus = "completed" | "active" | "locked";
+
+interface Modulo {
+  id: number;
+  label: string;
+  title: string;
+  status: ModuleStatus;
+}
+
+const MODULOS: Modulo[] = [
   { id: 1, label: "MÓDULO 1", title: "Introdução ao dinheiro", status: "completed" },
   {
     id: 2,
@@ -21,14 +30,6 @@ const MODULOS = [
   },
 ];
 
-type ModuleStatus = "completed" | "active" | "locked";
-
-interface Modulo {
-  id: number;
-  label: string;
-  title: string;
-  status: ModuleStatus;
-}
 
 export default function Learning() {
   const [activeModule, setActiveModule] = useState<Modulo | null>(null);
@@ -112,9 +113,8 @@ export default function Learning() {
               <div key={`lesson-${index}`} className={styles.trailStep}>
                 <button
                   type="button"
-                  className={`${styles.trailNode} ${
-                    index === activeLessonIndex ? styles.trailNodeActive : ""
-                  } ${index % 2 === 0 ? styles.trailNodeLeft : styles.trailNodeRight}`}
+                  className={`${styles.trailNode} ${index === activeLessonIndex ? styles.trailNodeActive : ""
+                    } ${index % 2 === 0 ? styles.trailNodeLeft : styles.trailNodeRight}`}
                   onClick={() => handleLessonClick(index)}
                   aria-label={`Lição ${index + 1}`}
                 >
