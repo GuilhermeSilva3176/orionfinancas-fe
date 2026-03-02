@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 2rem 1rem;
+    padding: 1rem 1rem;
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
@@ -91,7 +91,7 @@
 .userInfo {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.4rem;
 }
 
 .userName {
@@ -135,7 +135,7 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin: 1rem 0;
+    margin: .1rem 0;
 }
 
 .tabBtn {
@@ -171,7 +171,7 @@
     background: rgba(30, 41, 59, 0.5);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 1.5rem;
+    padding: 1rem;
     border-radius: 16px;
     display: flex;
     flex-direction: column;
@@ -626,4 +626,46 @@
     color: #0f172a;
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 10px 25px rgba(20, 184, 166, 0.4);
+}
+
+/* Detailed Stats Modal Content */
+.statsModalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-top: 1.5rem;
+}
+
+.modalStatRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.modalStatRow:last-child {
+    border-bottom: none;
+}
+
+.modalStatRow span:first-child {
+    font-weight: 500;
+}
+
+.modalStatRow span:last-child {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.rankBadge {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white !important;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
 }

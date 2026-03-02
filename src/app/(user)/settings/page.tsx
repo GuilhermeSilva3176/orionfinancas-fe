@@ -1,14 +1,30 @@
 
 "use client";
 
+import Link from 'next/link';
 import { useState } from 'react';
+import { ArrowLeft, Trash2, X, AlertTriangle } from 'lucide-react';
 import styles from './Settings.module.css';
 
 export default function SettingsPage() {
     const [activeTab, setActiveTab] = useState('profile');
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const handleDeleteAccount = () => {
+        // Lógica de exclusão aqui
+        alert("Conta excluída com sucesso.");
+        window.location.href = '/';
+    };
 
     return (
         <div className={styles.settingsContainer}>
+            <div className={styles.headerActions}>
+                <Link href="/profile" className={styles.backBtn}>
+                    <ArrowLeft size={16} />
+                    Voltar
+                </Link>
+            </div>
+
             <h1 className={styles.pageTitle}>Configurações</h1>
 
             <div className={styles.settingsLayout}>
@@ -50,7 +66,18 @@ export default function SettingsPage() {
                                     <label>Bio</label>
                                     <textarea defaultValue="Estudante de Sistemas de Informação focado em educação financeira." />
                                 </div>
-                                <button type="submit" className={styles.saveBtn}>Salvar Alterações</button>
+                                <div className={styles.formFooter}>
+                                    <button type="submit" className={styles.saveBtn}>Salvar Alterações</button>
+
+                                    <button
+                                        type="button"
+                                        className={styles.btnDeleteInline}
+                                        onClick={() => setIsDeleteModalOpen(true)}
+                                    >
+                                        <Trash2 size={16} />
+                                        Excluir minha conta
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     )}
@@ -94,6 +121,36 @@ export default function SettingsPage() {
                     )}
                 </main>
             </div>
+            {/* Delete Account Modal */}
+            {isDeleteModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsDeleteModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2 style={{ color: '#ff6464' }}>Excluir Conta</h2>
+                            <button className={styles.closeModal} onClick={() => setIsDeleteModalOpen(false)}>
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <div className={styles.modalBody}>
+                            <div className={styles.warningIcon}>
+                                <AlertTriangle size={48} color="#ff6464" />
+                            </div>
+                            <p className={styles.confirmText}>
+                                Tem certeza que deseja <strong>excluir permanentemente</strong> sua conta?<br />
+                                Todos os seus dados, lições e conquistas serão perdidos para sempre.
+                            </p>
+                        </div>
+                        <div className={styles.modalFooter}>
+                            <button className={styles.secondaryBtn} onClick={() => setIsDeleteModalOpen(false)}>
+                                Cancelar
+                            </button>
+                            <button className={styles.deleteConfirmBtn} onClick={handleDeleteAccount}>
+                                Excluir Permanentemente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

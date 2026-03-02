@@ -52,13 +52,21 @@ const MOCK_USER_DATA = {
         { title: 'Gabarite 3 quizzes perfeitos', reward: '10 moedas' },
         { title: 'Acumule 20 moedas', reward: 'XP Bônus' },
         { title: 'Cumpra 5 missões', reward: 'Badge' },
-    ]
+    ],
+    accountDetails: {
+        memberSince: "Janeiro 2024",
+        totalCoinsEarned: 2450,
+        currentStreak: 15,
+        rank: "Investidor Prata",
+        totalTimeSpent: "42 horas"
+    }
 };
 
 export default function ProfilePage() {
     const [userData] = useState(MOCK_USER_DATA);
     const [activeTab, setActiveTab] = useState<'lessons' | 'goals'>('lessons');
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+    const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
     const [currentAvatarImg, setCurrentAvatarImg] = useState(userData.currentAvatar);
 
     // Calculate max height for bars
@@ -128,7 +136,12 @@ export default function ProfilePage() {
                                     <span>{userData.toughestModule}</span>
                                 </div>
                             </div>
-                            <button className={styles.detailBtn}>Ver detalhadamente</button>
+                            <button
+                                className={styles.detailBtn}
+                                onClick={() => setIsStatsModalOpen(true)}
+                            >
+                                Ver detalhadamente
+                            </button>
                         </div>
 
                         {/* Right Column: Graph & Suggestion */}
@@ -187,7 +200,12 @@ export default function ProfilePage() {
                                     </div>
                                 ))}
                             </div>
-                            <button className={styles.detailBtn}>Ver todas metas</button>
+                            <button
+                                className={styles.detailBtn}
+                                onClick={() => window.location.href = '/goals'}
+                            >
+                                Ver todas metas
+                            </button>
                         </div>
 
                         {/* Missões Column */}
@@ -204,7 +222,12 @@ export default function ProfilePage() {
                                     </div>
                                 ))}
                             </div>
-                            <button className={styles.detailBtn}>Ver todas missões</button>
+                            <button
+                                className={styles.detailBtn}
+                                onClick={() => window.location.href = '/missions'}
+                            >
+                                Ver todas missões
+                            </button>
                         </div>
                     </>
                 )}
@@ -248,6 +271,41 @@ export default function ProfilePage() {
                             <Link href="/shop" className={styles.shopLink}>
                                 Ir para a loja comprar novos ícones
                             </Link>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Detailed Stats Modal */}
+            {isStatsModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsStatsModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2>Detalhes da Conta</h2>
+                            <button className={styles.closeModal} onClick={() => setIsStatsModalOpen(false)}>
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <div className={styles.statsModalBody}>
+                            <div className={styles.modalStatRow}>
+                                <span>Membro desde:</span>
+                                <span>{userData.accountDetails.memberSince}</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Total de moedas ganhas:</span>
+                                <span>🪙 {userData.accountDetails.totalCoinsEarned}</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Ofensiva atual:</span>
+                                <span>🔥 {userData.accountDetails.currentStreak} dias</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Rank atual:</span>
+                                <span className={styles.rankBadge}>{userData.accountDetails.rank}</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Tempo total de estudo:</span>
+                                <span>⏱️ {userData.accountDetails.totalTimeSpent}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
