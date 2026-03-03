@@ -54,7 +54,7 @@ export function Header({ variant = 'public' }: HeaderProps) {
     <header className={`${styles.header} ${styles[variant]}`}>
       <div className={styles.container}>
         <div className={styles.headerContent}>
-          <Link href="/" className={styles.logo}>
+          <Link href={variant === 'logged' ? '/learning' : '/'} className={styles.logo}>
             <span className={styles.logoText}>Órion Finanças</span>
           </Link>
 
@@ -77,7 +77,7 @@ export function Header({ variant = 'public' }: HeaderProps) {
                   className={styles.iconBtn}
                   onClick={() => setIsNotificationsOpen((prev) => !prev)}
                 >
-                  <Bell size={20} />
+                  <Bell size={20} color="var(--text-primary)" />
                 </button>
 
                 {isNotificationsOpen && (

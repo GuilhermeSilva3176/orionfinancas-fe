@@ -343,3 +343,99 @@
     .modalFooter .secondaryBtn {
         flex: 1;
     }
+
+    /* Subscription Modal Specifics */
+    .premiumPlanCard {
+        background: rgba(45, 212, 191, 0.05);
+        border: 2px solid var(--primary-color);
+        padding: 1.5rem;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .premiumPlanCard::before {
+        content: 'RECOMENDADO';
+        position: absolute;
+        top: 12px;
+        right: -30px;
+        background: var(--primary-color);
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 800;
+        padding: 4px 40px;
+        transform: rotate(45deg);
+    }
+
+    .planItemHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .planItemTitle {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .planItemPrice {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--primary-color);
+    }
+
+    .planSavings {
+        font-size: 0.8rem;
+        color: var(--primary-color);
+        font-weight: 600;
+        background: rgba(20, 184, 166, 0.15);
+        padding: 2px 8px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 1rem;
+    }
+
+    .planFeatures {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .planFeatures li {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .featureCheck {
+        color: var(--primary-color);
+        font-weight: 800;
+    }
+
+    .upgradeBtn {
+        width: 100%;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
+    }
+
+    .upgradeBtn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(20, 184, 166, 0.5);
+    }

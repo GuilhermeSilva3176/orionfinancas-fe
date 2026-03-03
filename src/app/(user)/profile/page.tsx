@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { User, Cat, Dog, Shield, Star, Zap, X } from 'lucide-react';
 import styles from './Profile.module.css';
+import { Coins, Flame, Clock } from 'lucide-react';
 
 const AVAILABLE_AVATARS = [
     { id: 'user', icon: User, label: 'Padrão' },
@@ -19,10 +20,6 @@ const AVAILABLE_AVATARS = [
 const MOCK_USER_DATA = {
     name: "Guilherme Silva",
     currentAvatar: "/images/avatar.png",
-    xpWeekly: 450,
-    lessonsCompleted: 12,
-    bestPerformance: "Módulo 1",
-    toughestModule: "Módulo 2",
     suggestedLesson: {
         title: "Títulos públicos",
         link: "/lessons/titulos-publicos"
@@ -53,8 +50,43 @@ const MOCK_USER_DATA = {
         { title: 'Acumule 20 moedas', reward: 'XP Bônus' },
         { title: 'Cumpra 5 missões', reward: 'Badge' },
     ],
+    allGoals: [
+        { title: 'Economizar R$ 500', progress: 100 },
+        { title: 'Investir em Tesouro Direto', progress: 100 },
+        { title: 'Fundo de Emergência', progress: 60 },
+        { title: 'Comprar Notebook', progress: 30 },
+        { title: 'Viagem de Férias', progress: 10 },
+        { title: 'Aposentadoria precoce', progress: 5 },
+        { title: 'Trocar de Carro', progress: 45 },
+        { title: 'Curso de Especialização', progress: 85 },
+        { title: 'Montar Setup Gamer', progress: 15 },
+        { title: 'Reforma da Casa', progress: 0 },
+        { title: 'Fundo para Emergência 2', progress: 20 },
+        { title: 'Viagem Japão', progress: 5 },
+        { title: 'Aposentadoria 2', progress: 10 },
+    ],
+    allMissions: [
+        { title: 'Gabarite 3 quizzes perfeitos', reward: '10 moedas', completed: true },
+        { title: 'Acumule 20 moedas', reward: 'XP Bônus', completed: true },
+        { title: 'Cumpra 5 missões', reward: 'Badge', completed: true },
+        { title: 'Estude por 2 horas', reward: '5 moedas', completed: false },
+        { title: 'Complete um módulo', reward: 'XP extra', completed: false },
+        { title: 'Convide um amigo', reward: '15 moedas', completed: false },
+        { title: 'Acesse o app por 7 dias', reward: 'Vidas extra', completed: true },
+        { title: 'Faça 10 exercícios', reward: 'XP Bônus', completed: true },
+        { title: 'Personalize seu perfil', reward: '5 moedas', completed: true },
+        { title: 'Alcance o rank Prata', reward: 'Badge Especial', completed: false },
+        { title: 'Deposite em uma meta', reward: '10 moedas', completed: false },
+        { title: 'Missão Bônus 1', reward: 'XP', completed: true },
+        { title: 'Missão Bônus 2', reward: 'Coins', completed: false },
+        { title: 'Missão Bônus 3', reward: 'Hearts', completed: false },
+    ],
     accountDetails: {
         memberSince: "Janeiro 2024",
+        xpWeekly: 450,
+        lessonsCompleted: 12,
+        bestPerformance: "Módulo 1",
+        toughestModule: "Módulo 2",
         totalCoinsEarned: 2450,
         currentStreak: 15,
         rank: "Investidor Prata",
@@ -63,10 +95,13 @@ const MOCK_USER_DATA = {
 };
 
 export default function ProfilePage() {
+    // Forcing state update from MOCK_USER_DATA (Refresh)
     const [userData] = useState(MOCK_USER_DATA);
     const [activeTab, setActiveTab] = useState<'lessons' | 'goals'>('lessons');
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
     const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+    const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
+    const [isMissionsModalOpen, setIsMissionsModalOpen] = useState(false);
     const [currentAvatarImg, setCurrentAvatarImg] = useState(userData.currentAvatar);
 
     // Calculate max height for bars
@@ -121,19 +156,19 @@ export default function ProfilePage() {
                             <div className={styles.statList}>
                                 <div className={styles.statRow}>
                                     <span>Evolução de XP (semanal)</span>
-                                    <span className={styles.xpText}>+{userData.xpWeekly} XP</span>
+                                    <span className={styles.xpText}>+{MOCK_USER_DATA.accountDetails.xpWeekly} XP</span>
                                 </div>
                                 <div className={styles.statRow}>
                                     <span>Lições concluídas</span>
-                                    <span>{userData.lessonsCompleted}</span>
+                                    <span>{MOCK_USER_DATA.accountDetails.lessonsCompleted}</span>
                                 </div>
                                 <div className={styles.statRow}>
                                     <span>Melhor desempenho</span>
-                                    <span>{userData.bestPerformance}</span>
+                                    <span>{MOCK_USER_DATA.accountDetails.bestPerformance}</span>
                                 </div>
                                 <div className={styles.statRow}>
                                     <span>Mais tentativas</span>
-                                    <span>{userData.toughestModule}</span>
+                                    <span>{MOCK_USER_DATA.accountDetails.toughestModule}</span>
                                 </div>
                             </div>
                             <button
@@ -202,7 +237,7 @@ export default function ProfilePage() {
                             </div>
                             <button
                                 className={styles.detailBtn}
-                                onClick={() => window.location.href = '/goals'}
+                                onClick={() => setIsGoalsModalOpen(true)}
                             >
                                 Ver todas metas
                             </button>
@@ -224,7 +259,7 @@ export default function ProfilePage() {
                             </div>
                             <button
                                 className={styles.detailBtn}
-                                onClick={() => window.location.href = '/missions'}
+                                onClick={() => setIsMissionsModalOpen(true)}
                             >
                                 Ver todas missões
                             </button>
@@ -288,24 +323,105 @@ export default function ProfilePage() {
                         <div className={styles.statsModalBody}>
                             <div className={styles.modalStatRow}>
                                 <span>Membro desde:</span>
-                                <span>{userData.accountDetails.memberSince}</span>
+                                <span>{MOCK_USER_DATA.accountDetails.memberSince}</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Evolução de XP (semanal):</span>
+                                <span className={styles.xpText}>+{MOCK_USER_DATA.accountDetails.xpWeekly} XP</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Lições concluídas:</span>
+                                <span>{MOCK_USER_DATA.accountDetails.lessonsCompleted}</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Melhor desempenho:</span>
+                                <span>{MOCK_USER_DATA.accountDetails.bestPerformance}</span>
+                            </div>
+                            <div className={styles.modalStatRow}>
+                                <span>Mais tentativas:</span>
+                                <span>{MOCK_USER_DATA.accountDetails.toughestModule}</span>
                             </div>
                             <div className={styles.modalStatRow}>
                                 <span>Total de moedas ganhas:</span>
-                                <span>🪙 {userData.accountDetails.totalCoinsEarned}</span>
+                                <span><Coins size={18} /> {MOCK_USER_DATA.accountDetails.totalCoinsEarned}</span>
                             </div>
                             <div className={styles.modalStatRow}>
                                 <span>Ofensiva atual:</span>
-                                <span>🔥 {userData.accountDetails.currentStreak} dias</span>
+                                <span><Flame size={18} /> {MOCK_USER_DATA.accountDetails.currentStreak} dias</span>
                             </div>
                             <div className={styles.modalStatRow}>
                                 <span>Rank atual:</span>
-                                <span className={styles.rankBadge}>{userData.accountDetails.rank}</span>
+                                <span className={styles.rankBadge}>{MOCK_USER_DATA.accountDetails.rank}</span>
                             </div>
-                            <div className={styles.modalStatRow}>
+                            <div className={styles.modalStatRow} style={{ borderBottom: 'none' }}>
                                 <span>Tempo total de estudo:</span>
-                                <span>⏱️ {userData.accountDetails.totalTimeSpent}</span>
+                                <span><Clock size={18} /> {MOCK_USER_DATA.accountDetails.totalTimeSpent}</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* All Goals Modal */}
+            {isGoalsModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsGoalsModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2>Todas as Metas</h2>
+                            <button className={styles.closeModal} onClick={() => setIsGoalsModalOpen(false)}>
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <div className={styles.statsModalBody}>
+                            {MOCK_USER_DATA.allGoals.map((goal, index) => (
+                                <div key={index} className={styles.goalRow} style={{ marginBottom: '1rem' }}>
+                                    <div className={styles.goalInfo}>
+                                        <span style={{ fontWeight: 600 }}>{goal.title}</span>
+                                        <span className={styles.goalPercentage}>{goal.progress}%</span>
+                                    </div>
+                                    <div className={styles.progressBar}>
+                                        <div
+                                            className={styles.progressFill}
+                                            style={{ width: `${goal.progress}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className={styles.modalFooterNote}>
+                            <Link href="/goals" className={styles.shopLink}>Ir para página de Metas</Link>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* All Missions Modal */}
+            {isMissionsModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsMissionsModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2>Histórico de Missões</h2>
+                            <button className={styles.closeModal} onClick={() => setIsMissionsModalOpen(false)}>
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <div className={styles.statsModalBody}>
+                            <div className={styles.missionList}>
+                                {MOCK_USER_DATA.allMissions.map((mission, index) => (
+                                    <div key={index} className={styles.missionItem} style={{ opacity: mission.completed ? 1 : 0.6 }}>
+                                        <div className={styles.missionCheck} style={{ background: mission.completed ? 'var(--primary-color)' : 'rgba(255,255,255,0.1)' }}>
+                                            {mission.completed ? '✓' : '○'}
+                                        </div>
+                                        <div className={styles.missionDetails}>
+                                            <p className={styles.missionText}>{mission.title}</p>
+                                            <span className={styles.missionReward}>{mission.reward}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className={styles.modalFooterNote}>
+                            <Link href="/missions" className={styles.shopLink}>Ir para página de Missões</Link>
                         </div>
                     </div>
                 </div>

@@ -15,7 +15,9 @@
 .sidebarLeft {
     position: sticky;
     top: 90px;
-    height: fit-content;
+    height: calc(100vh - 22vh);
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebarNav {
@@ -46,6 +48,18 @@
     font-weight: 700;
     color: var(--text-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.logoutItem {
+    margin-top: auto;
+    color: #ff4d4d;
+    border: 1px solid transparent;
+}
+
+.logoutItem:hover {
+    background: rgba(255, 77, 77, 0.1) !important;
+    color: #ff4d4d !important;
+    border-color: rgba(255, 77, 77, 0.2);
 }
 
 .mainContent {
