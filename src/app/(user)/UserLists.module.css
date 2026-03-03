@@ -241,12 +241,12 @@
 }
 
 .confirmDepositBtn {
-    background: linear-gradient(135deg, #facc15, #f97316);
-    color: #111827;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--dark-bg);
 }
 
 .confirmDepositBtn:hover {
-    background: linear-gradient(135deg, #facc15, #f59e0b);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
 }
 
 /* =========
@@ -335,9 +335,9 @@
 }
 
 .depositBtn {
-    background: linear-gradient(135deg, #facc15, #f97316);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     border: none;
-    color: #111827;
+    color: var(--dark-bg);
     padding: 0 1.6rem;
     height: 44px;
     border-radius: 999px;
@@ -358,5 +358,5 @@
 .depositBtn:hover {
     opacity: 0.95;
     transform: translateY(-1px);
-    box-shadow: 0 10px 25px rgba(250, 204, 21, 0.35);
+    box-shadow: 0 10px 25px rgba(0, 200, 150, 0.35);
 }

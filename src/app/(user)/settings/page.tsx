@@ -9,6 +9,7 @@ import styles from './Settings.module.css';
 export default function SettingsPage() {
     const [activeTab, setActiveTab] = useState('profile');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
 
     const handleDeleteAccount = () => {
         // Lógica de exclusão aqui
@@ -113,7 +114,12 @@ export default function SettingsPage() {
                                 </div>
                                 <p>Sua assinatura está ativa até 14/03/2026.</p>
                                 <div className={styles.planActions}>
-                                    <button className={styles.secondaryBtn}>Mudar Plano</button>
+                                    <button
+                                        className={styles.secondaryBtn}
+                                        onClick={() => setIsPlanModalOpen(true)}
+                                    >
+                                        Mudar Plano
+                                    </button>
                                     <button className={styles.dangerBtn}>Cancelar Assinatura</button>
                                 </div>
                             </div>
@@ -121,6 +127,50 @@ export default function SettingsPage() {
                     )}
                 </main>
             </div>
+
+            {/* Change Plan Modal */}
+            {isPlanModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsPlanModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2>Mudar para Plano Anual</h2>
+                            <button className={styles.closeModal} onClick={() => setIsPlanModalOpen(false)}>
+                                <X size={24} />
+                            </button>
+                        </div>
+                        <div className={styles.modalBody}>
+                            <p className={styles.modalSub}>Economize mais de 20% mudando para o pagamento anual!</p>
+
+                            <div className={styles.premiumPlanCard}>
+                                <div className={styles.planItemHeader}>
+                                    <span className={styles.planItemTitle}>Plano Anual</span>
+                                    <span className={styles.planItemPrice}>R$ 289,90/ano</span>
+                                </div>
+                                <span className={styles.planSavings}>Equivale a R$ 24,15 por mês</span>
+
+                                <ul className={styles.planFeatures}>
+                                    <li><span className={styles.featureCheck}>✓</span> Vidas ilimitadas</li>
+                                    <li><span className={styles.featureCheck}>✓</span> Sem anúncios</li>
+                                    <li><span className={styles.featureCheck}>✓</span> Cursos exclusivos de investimento</li>
+                                </ul>
+                            </div>
+
+                            <button className={styles.upgradeBtn} onClick={() => {
+                                alert("Upgrade solicitado para o Plano Anual!");
+                                setIsPlanModalOpen(false);
+                            }}>
+                                Confirmar Upgrade Anual
+                            </button>
+                        </div>
+                        <div className={styles.modalFooterNote}>
+                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                O valor será cobrado imediatamente no seu cartão padrão.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Delete Account Modal */}
             {isDeleteModalOpen && (
                 <div className={styles.modalOverlay} onClick={() => setIsDeleteModalOpen(false)}>

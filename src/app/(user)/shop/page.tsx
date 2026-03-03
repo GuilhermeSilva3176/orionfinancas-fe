@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { SubscriptionModal } from '@/components/shop/SubscriptionModal';
 import styles from './Shop.module.css';
+import { Coins } from 'lucide-react';
 
 export default function ShopPage() {
     const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -15,6 +16,24 @@ export default function ShopPage() {
         { id: 4, name: "Master Invest", price: 1200, type: "icon", img: "/images/avatar3.png" },
         { id: 5, name: "Punk Rock", price: 600, type: "icon", img: "/images/avatar4.png" },
         { id: 6, name: "Astronauta", price: 1500, type: "icon", img: "/images/avatar5.png" },
+        { id: 7, name: "Ícone Clássico", price: 300, type: "icon", img: "/images/avatar.png" },
+        { id: 8, name: "Ninja das Finanças", price: 500, type: "icon", img: "/images/avatar1.png" },
+        { id: 9, name: "Socialite", price: 800, type: "icon", img: "/images/avatar2.png" },
+        { id: 10, name: "Master Invest", price: 1200, type: "icon", img: "/images/avatar3.png" },
+        { id: 11, name: "Punk Rock", price: 600, type: "icon", img: "/images/avatar4.png" },
+        { id: 12, name: "Astronauta", price: 1500, type: "icon", img: "/images/avatar5.png" },
+        { id: 13, name: "Ícone Clássico", price: 300, type: "icon", img: "/images/avatar.png" },
+        { id: 14, name: "Ninja das Finanças", price: 500, type: "icon", img: "/images/avatar1.png" },
+        { id: 15, name: "Socialite", price: 800, type: "icon", img: "/images/avatar2.png" },
+        { id: 16, name: "Master Invest", price: 1200, type: "icon", img: "/images/avatar3.png" },
+        { id: 17, name: "Punk Rock", price: 600, type: "icon", img: "/images/avatar4.png" },
+        { id: 18, name: "Astronauta", price: 1500, type: "icon", img: "/images/avatar5.png" },
+        { id: 19, name: "Ícone Clássico", price: 300, type: "icon", img: "/images/avatar.png" },
+        { id: 20, name: "Ninja das Finanças", price: 500, type: "icon", img: "/images/avatar1.png" },
+        { id: 21, name: "Socialite", price: 800, type: "icon", img: "/images/avatar2.png" },
+        { id: 22, name: "Master Invest", price: 1200, type: "icon", img: "/images/avatar3.png" },
+        { id: 23, name: "Punk Rock", price: 600, type: "icon", img: "/images/avatar4.png" },
+        { id: 24, name: "Astronauta", price: 1500, type: "icon", img: "/images/avatar5.png" },
     ];
 
     const handleBuyClick = (item: any) => {
@@ -31,6 +50,8 @@ export default function ShopPage() {
         alert(`Você comprou: ${selectedItem.name}!`);
         setSelectedItem(null);
     };
+
+    const scrollAreaRef = useRef<HTMLDivElement>(null);
 
     return (
         <div className={styles.shopContainer}>
@@ -50,26 +71,28 @@ export default function ShopPage() {
                 onClose={() => setIsSubscriptionModalOpen(false)}
             />
 
-            <div className={styles.shopGrid}>
-                {shopItems.map((item) => (
-                    <div key={item.id} className={styles.itemCard}>
-                        <div className={styles.imageContainer}>
-                            <img src={item.img} alt={item.name} className={styles.itemImg} />
-                        </div>
-
-                        <div className={styles.itemInfo}>
-                            <div className={styles.itemPrice}>
-                                <span>🪙</span> {item.price}
+            <div className={styles.shopScrollArea} ref={scrollAreaRef}>
+                <div className={styles.shopGrid}>
+                    {shopItems.map((item) => (
+                        <div key={item.id} className={styles.itemCard}>
+                            <div className={styles.imageContainer}>
+                                <img src={item.img} alt={item.name} className={styles.itemImg} />
                             </div>
-                            <button
-                                className={styles.buyBtn}
-                                onClick={() => handleBuyClick(item)}
-                            >
-                                Comprar
-                            </button>
+
+                            <div className={styles.itemInfo}>
+                                <div className={styles.itemPrice}>
+                                    <Coins size={20} color="#ffb800" /> {item.price}
+                                </div>
+                                <button
+                                    className={styles.buyBtn}
+                                    onClick={() => handleBuyClick(item)}
+                                >
+                                    Comprar
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
             {/* Modal de Confirmação */}
@@ -86,7 +109,7 @@ export default function ShopPage() {
                         <div className={styles.modalBody}>
                             <div className={styles.itemDetail}>
                                 <div className={styles.itemPrice}>
-                                    <span>🪙</span> {selectedItem.price} moedas
+                                    <Coins size={20} color="#ffb800" /> {selectedItem.price} moedas
                                 </div>
                             </div>
                             <p className={styles.confirmText}>

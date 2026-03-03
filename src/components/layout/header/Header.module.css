@@ -95,9 +95,18 @@
 .iconBtn {
   background: none;
   border: none;
-  font-size: 1.2rem;
   cursor: pointer;
-  color: var(--dark-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  /* Adicionado um padding para facilitar o clique */
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+
+.iconBtn:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .avatar {

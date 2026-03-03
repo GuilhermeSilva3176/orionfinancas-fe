@@ -6,10 +6,13 @@ import styles from '../UserLists.module.css';
 export default function MissionsPage() {
     const missions = [
         { id: 1, title: "Gabarite 3 quizzes perfeitos", current: 1, total: 3, reward: "Recompensa: XP" },
-        { id: 2, title: "Faça aulas por 5 dias seguidos", current: 1, total: 5, reward: "Recompensa: Moedas" },
+        { id: 2, title: "Faça aulas por 5 dias seguidos", current: 5, total: 5, reward: "Recompensa: Moedas" }, // Exemplo de concluída
         { id: 3, title: "Acumule 20 moedas", current: 1, total: 20, reward: "Recompensa: Vidas" },
-        { id: 4, title: "Cumpra 5 missões", current: 1, total: 5, reward: "Recompensa: Conquista" },
+        { id: 4, title: "Cumpra 5 missões", current: 5, total: 5, reward: "Recompensa: Conquista" }, // Exemplo de concluída
     ];
+
+    // Filtra para mostrar apenas missões em andamento
+    const ongoingMissions = missions.filter(mission => mission.current < mission.total);
 
     return (
         <div className={styles.pageContainer}>
@@ -17,7 +20,7 @@ export default function MissionsPage() {
 
             <div className={styles.listContainer}>
                 <div className={styles.scrollableList}>
-                    {missions.map((mission) => (
+                    {ongoingMissions.map((mission) => (
                         <div key={mission.id} className={styles.card}>
                             <div className={styles.cardInfo} style={{ flex: 1 }}>
                                 <div className={styles.cardTitle}>{mission.title}</div>
