@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { User, Cat, Dog, Shield, Star, Zap, X } from 'lucide-react';
+import { User, Cat, Dog, Shield, Star, Zap, X, Trash2, Pencil, Check } from 'lucide-react';
 import styles from './Profile.module.css';
 import { Coins, Flame, Clock } from 'lucide-react';
 
@@ -41,9 +41,9 @@ const MOCK_USER_DATA = {
         { id: 4, img: '/images/avatar3.png', label: 'Especial 3' },
     ],
     recentGoals: [
-        { title: 'Economizar R$ 500', progress: 100 },
-        { title: 'Investir em Tesouro Direto', progress: 100 },
-        { title: 'Fundo de Emergência', progress: 60 },
+        { title: 'Economizar R$ 500', current: 500, target: 500 },
+        { title: 'Investir em Tesouro Direto', current: 1000, target: 1000 },
+        { title: 'Fundo de Emergência', current: 3000, target: 5000 },
     ],
     recentMissions: [
         { title: 'Gabarite 3 quizzes perfeitos', reward: '10 moedas' },
@@ -51,20 +51,15 @@ const MOCK_USER_DATA = {
         { title: 'Cumpra 5 missões', reward: 'Badge' },
     ],
     allGoals: [
-        { title: 'Economizar R$ 500', progress: 100 },
-        { title: 'Investir em Tesouro Direto', progress: 100 },
-        { title: 'Fundo de Emergência', progress: 60 },
-        { title: 'Comprar Notebook', progress: 30 },
-        { title: 'Viagem de Férias', progress: 10 },
-        { title: 'Aposentadoria precoce', progress: 5 },
-        { title: 'Trocar de Carro', progress: 45 },
-        { title: 'Curso de Especialização', progress: 85 },
-        { title: 'Montar Setup Gamer', progress: 15 },
-        { title: 'Reforma da Casa', progress: 0 },
-        { title: 'Fundo para Emergência 2', progress: 20 },
-        { title: 'Viagem Japão', progress: 5 },
-        { title: 'Aposentadoria 2', progress: 10 },
+        { title: 'Economizar R$ 500', current: 500, target: 500, urgency: 'high' },
+        { title: 'Investir em Tesouro Direto', current: 1000, target: 1000, urgency: 'medium' },
+        { title: 'Fundo de Emergência', current: 3000, target: 5000, urgency: 'high' },
+        { title: 'Comprar Notebook', current: 1500, target: 5000, urgency: 'medium' },
+        { title: 'Viagem de Férias', current: 800, target: 8000, urgency: 'low' },
     ],
+    financeData: {
+        currentBalance: 1500.00
+    },
     allMissions: [
         { title: 'Gabarite 3 quizzes perfeitos', reward: '10 moedas', completed: true },
         { title: 'Acumule 20 moedas', reward: 'XP Bônus', completed: true },
@@ -96,13 +91,87 @@ const MOCK_USER_DATA = {
 
 export default function ProfilePage() {
     // Forcing state update from MOCK_USER_DATA (Refresh)
-    const [userData] = useState(MOCK_USER_DATA);
+    const [userData, setUserData] = useState(MOCK_USER_DATA);
     const [activeTab, setActiveTab] = useState<'lessons' | 'goals'>('lessons');
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
     const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
     const [isGoalsModalOpen, setIsGoalsModalOpen] = useState(false);
     const [isMissionsModalOpen, setIsMissionsModalOpen] = useState(false);
     const [currentAvatarImg, setCurrentAvatarImg] = useState(userData.currentAvatar);
+
+    // Goal Management States
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedGoal, setSelectedGoal] = useState<any>(null);
+    const [editForm, setEditForm] = useState({
+        title: '',
+        current: '',
+        target: '',
+        date: '',
+        description: '',
+        urgency: 'medium',
+    });
+
+    const handleDeleteGoal = (goal: any) => {
+        setSelectedGoal(goal);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmDeleteGoal = () => {
+        if (selectedGoal) {
+            setUserData(prev => ({
+                ...prev,
+                financeData: {
+                    ...prev.financeData,
+                    currentBalance: prev.financeData.currentBalance + (selectedGoal.current || 0)
+                },
+                allGoals: prev.allGoals.filter(goal => goal.title !== selectedGoal.title),
+                recentGoals: prev.recentGoals.filter(goal => goal.title !== selectedGoal.title)
+            }));
+            setIsDeleteModalOpen(false);
+            setSelectedGoal(null);
+        }
+    };
+
+    const startEditing = (goal: any) => {
+        setSelectedGoal(goal);
+        setEditForm({
+            title: goal.title,
+            current: (goal.current || 0).toString(),
+            target: (goal.target || 0).toString(),
+            date: goal.date || '',
+            description: goal.description || '',
+            urgency: goal.urgency || 'medium',
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const saveEdit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editForm.title) return;
+
+        setUserData(prev => ({
+            ...prev,
+            allGoals: prev.allGoals.map(g => g.title === selectedGoal.title ? {
+                ...g,
+                title: editForm.title,
+                target: parseFloat(editForm.target) || 0,
+                date: editForm.date,
+                description: editForm.description,
+                urgency: editForm.urgency
+            } : g),
+            recentGoals: prev.recentGoals.map(g => g.title === selectedGoal.title ? {
+                ...g,
+                title: editForm.title,
+                target: parseFloat(editForm.target) || 0,
+                date: editForm.date,
+                description: editForm.description,
+                urgency: editForm.urgency
+            } : g)
+        }));
+        setIsEditModalOpen(false);
+        setSelectedGoal(null);
+    };
 
     // Calculate max height for bars
     const maxLessons = Math.max(...userData.weeklyLessons.map(d => d.count));
@@ -224,12 +293,12 @@ export default function ProfilePage() {
                                     <div key={index} className={styles.goalRow}>
                                         <div className={styles.goalInfo}>
                                             <span>{goal.title}</span>
-                                            <span className={styles.goalPercentage}>{goal.progress}%</span>
+                                            <span className={styles.goalPercentage}>{Math.round((goal.current / (goal.target || 1)) * 100)}%</span>
                                         </div>
                                         <div className={styles.progressBar}>
                                             <div
                                                 className={styles.progressFill}
-                                                style={{ width: `${goal.progress}%` }}
+                                                style={{ width: `${Math.min((goal.current / (goal.target || 1)) * 100, 100)}%` }}
                                             ></div>
                                         </div>
                                     </div>
@@ -373,16 +442,34 @@ export default function ProfilePage() {
                             </button>
                         </div>
                         <div className={styles.statsModalBody}>
-                            {MOCK_USER_DATA.allGoals.map((goal, index) => (
-                                <div key={index} className={styles.goalRow} style={{ marginBottom: '1rem' }}>
-                                    <div className={styles.goalInfo}>
-                                        <span style={{ fontWeight: 600 }}>{goal.title}</span>
-                                        <span className={styles.goalPercentage}>{goal.progress}%</span>
+                            {userData.allGoals.map((goal, index) => (
+                                <div key={index} className={styles.goalRow} style={{ marginBottom: '1.25rem' }}>
+                                    <div className={styles.goalHeaderRow}>
+                                        <div className={styles.goalInfo}>
+                                            <span style={{ fontWeight: 600 }}>{goal.title}</span>
+                                            <span className={styles.goalPercentage}>{Math.round((goal.current / (goal.target || 1)) * 100)}%</span>
+                                        </div>
+                                        <div className={styles.goalActions}>
+                                            <button
+                                                className={styles.editGoalBtn}
+                                                onClick={() => startEditing(goal)}
+                                                title="Editar meta"
+                                            >
+                                                <Pencil size={14} />
+                                            </button>
+                                            <button
+                                                className={styles.deleteGoalBtn}
+                                                onClick={() => handleDeleteGoal(goal)}
+                                                title="Excluir meta"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
                                     </div>
                                     <div className={styles.progressBar}>
                                         <div
                                             className={styles.progressFill}
-                                            style={{ width: `${goal.progress}%` }}
+                                            style={{ width: `${Math.min((goal.current / (goal.target || 1)) * 100, 100)}%` }}
                                         ></div>
                                     </div>
                                 </div>
@@ -423,6 +510,157 @@ export default function ProfilePage() {
                         <div className={styles.modalFooterNote}>
                             <Link href="/missions" className={styles.shopLink}>Ir para página de Missões</Link>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Custom Delete Confirmation Modal */}
+            {isDeleteModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsDeleteModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px', textAlign: 'center' }}>
+                        <div className={styles.deleteWarningIcon}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                        </div>
+                        <h3 className={styles.modalTitle} style={{ color: '#ef4444' }}>Excluir Meta</h3>
+                        <p className={styles.modalSub} style={{ marginBottom: '2rem' }}>
+                            Tem certeza que deseja excluir a meta <strong>"{selectedGoal?.title}"</strong>?<br />
+                            <span style={{ fontSize: '0.85rem', opacity: 0.7 }}>O dinheiro reservado voltará para seu saldo.</span>
+                        </p>
+
+                        <div className={styles.modalFooter}>
+                            <button
+                                type="button"
+                                className={styles.cancelBtn}
+                                onClick={() => setIsDeleteModalOpen(false)}
+                            >
+                                Manter Meta
+                            </button>
+                            <button
+                                type="button"
+                                className={`${styles.confirmBtn} ${styles.deleteConfirmBtn}`}
+                                onClick={confirmDeleteGoal}
+                            >
+                                Sim, Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Full Edit Goal Modal */}
+            {isEditModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <h3 className={styles.modalTitle}>Editar Meta</h3>
+
+                        <div className={styles.goalModalHeaderRow}>
+                            <div className={styles.balanceBox}>
+                                <span className={styles.balanceLabel}>Saldo da conta</span>
+                                <span className={styles.balanceValue}>R$ {userData.financeData.currentBalance.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <div className={styles.urgencyBox}>
+                                <span className={styles.urgencyLabel}>Prioridade</span>
+                                <div className={styles.urgencyOptions}>
+                                    <button
+                                        className={`${styles.urgencyPill} ${styles.urgencyLow} ${editForm.urgency === 'low' ? styles.urgencySelected : ''}`}
+                                        onClick={() => setEditForm({ ...editForm, urgency: 'low' })}
+                                    >Baixa</button>
+                                    <button
+                                        className={`${styles.urgencyPill} ${styles.urgencyMedium} ${editForm.urgency === 'medium' ? styles.urgencySelected : ''}`}
+                                        onClick={() => setEditForm({ ...editForm, urgency: 'medium' })}
+                                    >Média</button>
+                                    <button
+                                        className={`${styles.urgencyPill} ${styles.urgencyHigh} ${editForm.urgency === 'high' ? styles.urgencySelected : ''}`}
+                                        onClick={() => setEditForm({ ...editForm, urgency: 'high' })}
+                                    >Alta</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form onSubmit={saveEdit}>
+                            <div className={styles.formGroup}>
+                                <label>Título da Meta</label>
+                                <input
+                                    type="text"
+                                    className={styles.formInput}
+                                    placeholder="Ex: Viagem de Férias"
+                                    value={editForm.title}
+                                    onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            <div className={styles.formGrid}>
+                                <div className={styles.formGroup}>
+                                    <label>Dinheiro reservado (R$)</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className={styles.formInput}
+                                        style={{ color: 'var(--primary-color)', fontWeight: 700 }}
+                                        value={editForm.current}
+                                        onChange={(e) => setEditForm({ ...editForm, current: e.target.value })}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>Valor Alvo (R$)</label>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        className={styles.formInput}
+                                        value={editForm.target}
+                                        onChange={(e) => setEditForm({ ...editForm, target: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={styles.formGrid}>
+                                <div className={styles.formGroup}>
+                                    <label>Data Limite</label>
+                                    <input
+                                        type="date"
+                                        className={styles.formInput}
+                                        value={editForm.date}
+                                        onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
+                                    />
+                                </div>
+                                <div className={styles.formGroup} style={{ opacity: editForm.target ? 1 : 0.5 }}>
+                                    <label>Resumo de Progresso</label>
+                                    <div className={styles.formInput} style={{ background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', fontWeight: 700, fontSize: '0.9rem' }}>
+                                        {editForm.target ? `${Math.round(((parseFloat(editForm.current) || 0) / (parseFloat(editForm.target) || 1)) * 100)}% concluído` : 'Defina o alvo'}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label>Descrição (opcional)</label>
+                                <textarea
+                                    className={styles.formInput}
+                                    style={{ minHeight: '80px', resize: 'none' }}
+                                    placeholder="Como você planeja alcançar isso?"
+                                    value={editForm.description}
+                                    onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                                />
+                            </div>
+
+                            <div className={styles.modalFooter}>
+                                <button
+                                    type="button"
+                                    className={styles.cancelBtn}
+                                    onClick={() => setIsEditModalOpen(false)}
+                                >
+                                    Cancelar
+                                </button>
+                                <button type="submit" className={styles.confirmBtn}>
+                                    Salvar Alterações
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
