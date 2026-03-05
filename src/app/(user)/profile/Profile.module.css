@@ -155,6 +155,180 @@
     box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
 }
 
+/* Goal Creation/Edit Modal Styles (Sync with Goals page) */
+.goalModalHeaderRow {
+    display: grid;
+    grid-template-columns: 1.1fr 1.2fr;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    align-items: stretch;
+}
+
+.balanceBox,
+.urgencyBox {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.balanceLabel,
+.urgencyLabel {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.balanceValue {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.urgencyOptions {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.urgencyPill {
+    flex: 1;
+    border-radius: 999px;
+    border: none;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #0f172a;
+    opacity: 0.7;
+    transition: all 0.2s;
+}
+
+.urgencyLow {
+    background: #22c55e;
+}
+
+.urgencyMedium {
+    background: #eab308;
+}
+
+.urgencyHigh {
+    background: #ef4444;
+}
+
+.urgencyPill:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.urgencySelected {
+    opacity: 1;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}
+
+.modalFooter {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.cancelBtn,
+.confirmBtn {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.cancelBtn {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.confirmBtn {
+    background: var(--primary-color);
+    color: #0f172a;
+}
+
+.confirmBtn:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+}
+
+/* Delete Modal Specifics */
+.deleteWarningIcon {
+    width: 64px;
+    height: 64px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.deleteWarningIcon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.deleteConfirmBtn {
+    background: #ef4444;
+    color: white;
+}
+
+.deleteConfirmBtn:hover {
+    background: #dc2626;
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+    text-align: left;
+    min-width: 0;
+}
+
+.formGroup label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.formInput {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.formInput:focus {
+    border-color: var(--primary-color);
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+@media (max-width: 480px) {
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .tabBtn:hover:not(.active) {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
@@ -325,14 +499,144 @@
 
 .goalInfo {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
     font-size: 0.9rem;
     color: var(--text-primary);
+    flex: 1;
+}
+
+.goalHeaderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.deleteGoalBtn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+}
+
+.goalActions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.editGoalBtn,
+.deleteGoalBtn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    opacity: 0.5;
+}
+
+.editGoalBtn:hover {
+    background: rgba(45, 212, 191, 0.1);
+    color: var(--primary-color);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.deleteGoalBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Edit Form Inline */
+.editGoalForm {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.editInput {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.progressEdit {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding-right: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.editInputSmall {
+    width: 45px;
+    background: none;
+    border: none;
+    padding: 0.4rem 0.2rem 0.4rem 0.6rem;
+    color: var(--primary-color);
+    font-weight: 700;
+    text-align: right;
+    outline: none;
+}
+
+.progressEdit span {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+
+.saveBtn {
+    background: var(--primary-color);
+    border: none;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.saveBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(20, 184, 166, 0.4);
+}
+
+.isEditing .progressBar {
+    opacity: 0.6;
 }
 
 .goalPercentage {
     color: var(--primary-color);
     font-weight: 700;
+    margin-left: auto;
+    margin-right: 1.5rem;
 }
 
 .progressBar {
@@ -481,13 +785,13 @@
 
 .modalContent {
     background: #1e293b;
-    width: 90%;
-    max-width: 500px;
-    padding: 2rem;
-    border-radius: 24px;
+    width: 95%;
+    max-width: 550px;
+    padding: 2.2rem;
+    border-radius: 28px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    animation: slideUp 0.3s ease-out;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideUp {
@@ -592,6 +896,22 @@
 
 .avatarOption.selected span {
     color: var(--primary-color);
+}
+
+/* Hide Spinners for all number inputs within this module */
+.editInput[type=number]::-webkit-outer-spin-button,
+.editInput[type=number]::-webkit-inner-spin-button,
+.editInputSmall[type=number]::-webkit-outer-spin-button,
+.editInputSmall[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.editInput[type=number],
+.editInputSmall[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 @media (max-width: 480px) {

@@ -1,19 +1,19 @@
 .aboutContainer {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 4rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 4rem;
 }
 
+/* HERO */
 .heroAbout {
   text-align: center;
-  margin-bottom: 2rem;
 }
 
 .title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
   font-weight: 800;
   margin-bottom: 1rem;
 }
@@ -25,9 +25,10 @@
   margin: 0 auto;
 }
 
+/* GRID PRINCIPAL */
 .contentGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
 }
 
@@ -36,21 +37,136 @@
   padding: 2.5rem;
   border-radius: 20px;
   border: 1px solid var(--border-color);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
   border-color: var(--primary-color);
 }
 
 .card h3 {
   color: var(--primary-color);
   margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .card p {
   color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 0.8rem;
+}
+
+/* MISSÃO VISÃO VALORES */
+.valuesSection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.valueCard {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-color);
+}
+
+.valueCard h4 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.valueCard p,
+.valueCard li {
+  color: var(--text-secondary);
   line-height: 1.6;
+}
+
+.valueCard ul {
+  padding-left: 1rem;
+}
+
+/* DIFERENCIAIS */
+.differentials {
+  text-align: center;
+}
+
+.differentials h2 {
+  margin-bottom: 2rem;
+}
+
+.differentialsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.diffCard {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  padding: 2rem;
+  border-radius: 18px;
+  transition: 0.3s ease;
+}
+
+.diffCard:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-4px);
+}
+
+.diffCard span {
+  font-size: 2rem;
+}
+
+.diffCard h4 {
+  margin: 1rem 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.diffCard p {
+  color: var(--text-secondary);
+}
+
+/* IMPACTO */
+.impact {
+  text-align: center;
+}
+
+.impactGrid {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.impactItem strong {
+  font-size: 2rem;
+  color: var(--primary-color);
+  display: block;
+}
+
+.impactItem span {
+  color: var(--text-secondary);
+}
+
+/* FUTURO */
+.future {
+  background: var(--dark-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.future p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-top: 1rem;
 }

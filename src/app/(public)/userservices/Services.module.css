@@ -85,3 +85,95 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* INTRO */
+.introSection {
+  text-align: center;
+  max-width: 800px;
+  margin: 2rem auto 4rem auto;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* BENEFIT */
+.benefit {
+  margin-top: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 0.9rem;
+}
+
+/* PROCESSO */
+.processSection {
+  text-align: center;
+  margin: 5rem 0;
+}
+
+.processSection h2 {
+  margin-bottom: 2rem;
+}
+
+.processSteps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+.processSteps div {
+  background: var(--dark-surface);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: 0.3s ease;
+}
+
+.processSteps div:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-4px);
+}
+
+/* AUDIÊNCIA */
+.audienceSection {
+  margin: 5rem 0;
+  text-align: center;
+}
+
+.audienceSection h2 {
+  margin-bottom: 2rem;
+}
+
+.audienceSection ul {
+  list-style: none;
+  padding: 0;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  font-size: 1.1rem;
+}
+
+/* CTA MELHORADO */
+.ctaSection {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(
+    180deg,
+    rgba(30, 41, 59, 1) 0%,
+    rgba(15, 23, 42, 1) 100%
+  );
+  border-radius: 30px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 4rem;
+}
+
+.ctaSection h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.ctaSection p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
