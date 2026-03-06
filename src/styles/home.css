@@ -47,7 +47,7 @@
   margin-top: 1rem;
 }
 
-/* ================= BOTÕES ================= */
+/* ================= BUTTONS ================= */
 .btn-primary {
   background: var(--primary-color);
   color: white;
@@ -102,7 +102,6 @@
   grid-template-columns: 1.2fr 0.8fr;
   gap: 3rem;
   align-items: center;
-  /* Centraliza verticalmente o texto com o card */
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -212,7 +211,6 @@
   color: var(--text-secondary);
 }
 
-/* espaço extra abaixo */
 .stats-bottom-space {
   height: 1.25rem;
 }
@@ -313,7 +311,6 @@
   max-width: 52ch;
 }
 
-/* Lista com checks verdes */
 .zigzag-checks {
   list-style: none;
   padding: 0;
@@ -336,18 +333,14 @@
   color: var(--primary-color);
   flex-shrink: 0;
   margin-top: 0.15rem;
-  /* alinha visualmente com o texto */
 }
 
-
-/* Botões */
 .zigzag-actions {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* Mídia (GIF) */
 .zigzag-media {
   display: flex;
   justify-content: center;
@@ -606,7 +599,6 @@
   line-height: 1.6;
 }
 
-/* hover elegante sem virar card */
 .diff-item:hover h3 {
   color: var(--primary-color);
   transition: 0.2s ease;
@@ -768,7 +760,6 @@
 
 .cta-box p {
   margin-bottom: 1.5rem;
-  /* aumenta o espaço entre o texto e o botão */
 }
 
 

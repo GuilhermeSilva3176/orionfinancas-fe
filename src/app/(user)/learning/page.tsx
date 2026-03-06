@@ -3,6 +3,7 @@
 import { Fragment, useState } from "react";
 import styles from "./Learning.module.css";
 import { LEARNING_DOCUMENT, getModuleById } from "./lessonsData";
+import Image from "next/image";
 
 type ModuleStatus = "completed" | "active" | "locked";
 
@@ -264,22 +265,44 @@ export default function Learning() {
   // Lista de módulos (tela inicial)
   return (
     <div className={styles.modulesContainer}>
-      <div className={styles.modulesPath}>
-        {MODULOS.map((mod, index) => (
-          <div key={mod.id} className={styles.moduleWrapper}>
-            <div
-              className={`${styles.moduleCard} ${styles[mod.status]}`}
-              onClick={() => handleModuleClick(mod)}
-            >
-              <span className={styles.moduleHeader}>{mod.label}</span>
-              <h3 className={styles.moduleTitle}>{mod.title}</h3>
-            </div>
+      <div className={styles.modulesShowcase}>
+        <header className={styles.studyIntro}>
+          <h1 className={styles.studyTitle}>
+            Sua <span className={styles.studyHighlight}>Área de Estudos</span>
+          </h1>
+          <p className={styles.studySubtitle}>
+            Avance pelos módulos no seu ritmo, pratique com quizzes e acompanhe sua evolução.
+          </p>
+        </header>
 
-            {index < MODULOS.length - 1 && (
-              <div className={styles.arrowConn}>↓</div>
-            )}
-          </div>
-        ))}
+        <div className={styles.modulesPath}>
+          {MODULOS.map((mod, index) => (
+            <div key={mod.id} className={styles.moduleWrapper}>
+              <div
+                className={`${styles.moduleCard} ${styles[mod.status]}`}
+                onClick={() => handleModuleClick(mod)}
+              >
+                <span className={styles.moduleHeader}>{mod.label}</span>
+                <h3 className={styles.moduleTitle}>{mod.title}</h3>
+              </div>
+
+              {index < MODULOS.length - 1 && (
+                <div className={styles.arrowConn}>↓</div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.moduleGifWrap}>
+          <Image
+            src="/assets/gifs/home/sprSketch3.gif"
+            alt="Mascote da área de módulos"
+            width={140}
+            height={233}
+            unoptimized
+            className={styles.moduleGif}
+          />
+        </div>
       </div>
     </div>
   );
