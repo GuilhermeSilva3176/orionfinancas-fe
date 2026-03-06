@@ -5,6 +5,20 @@ import "@/styles/home.css";
 import "@/styles/globals.css";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  Pin,
+  Brain,
+  Gamepad2,
+  TrendingUp,
+  CheckCircle2,
+  Check,
+  BarChart3,
+  Target,
+  BookOpen,
+  GraduationCap,
+  Rocket,
+  ShieldCheck
+} from "lucide-react";
 
 export default function HomePage() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -86,20 +100,36 @@ export default function HomePage() {
             </p>
 
             <div className="orion-highlights">
-              <div className="chip">📌 Simples</div>
-              <div className="chip">🧠 Didático</div>
-              <div className="chip">🎮 Gamificado</div>
-              <div className="chip">📈 Evolução real</div>
+              <div className="chip">
+                <Pin size={14} className="icon-inline" /> Simples
+              </div>
+              <div className="chip">
+                <Brain size={14} className="icon-inline" /> Didático
+              </div>
+              <div className="chip">
+                <Gamepad2 size={14} className="icon-inline" /> Gamificado
+              </div>
+              <div className="chip">
+                <TrendingUp size={14} className="icon-inline" /> Evolução real
+              </div>
             </div>
           </div>
 
           <div className="orion-card">
             <h3>O que você vai construir aqui</h3>
             <ul>
-              <li>✅ Controle de gastos e rotina financeira</li>
-              <li>✅ Metas, reserva de emergência e planejamento</li>
-              <li>✅ Noções de investimentos e juros</li>
-              <li>✅ Decisões melhores no dia a dia</li>
+              <li>
+                <CheckCircle2 size={18} className="highlight icon-inline" /> Controle de gastos e rotina financeira
+              </li>
+              <li>
+                <CheckCircle2 size={18} className="highlight icon-inline" /> Metas, reserva de emergência e planejamento
+              </li>
+              <li>
+                <CheckCircle2 size={18} className="highlight icon-inline" /> Noções de investimentos e juros
+              </li>
+              <li>
+                <CheckCircle2 size={18} className="highlight icon-inline" /> Decisões melhores no dia a dia
+              </li>
             </ul>
           </div>
         </div>
@@ -157,9 +187,15 @@ export default function HomePage() {
             </p>
 
             <ul className="zigzag-checks">
-              <li><span className="check">✔</span> Entenda para onde seu dinheiro vai</li>
-              <li><span className="check">✔</span> Crie metas e acompanhe seu progresso</li>
-              <li><span className="check">✔</span> Comece a investir com consciência</li>
+              <li>
+                <Check size={18} className="check" /> Entenda para onde seu dinheiro vai
+              </li>
+              <li>
+                <Check size={18} className="check" /> Crie metas e acompanhe seu progresso
+              </li>
+              <li>
+                <Check size={18} className="check" /> Comece a investir com consciência
+              </li>
             </ul>
           </div>
 
@@ -198,13 +234,13 @@ export default function HomePage() {
             </h2>
 
             <p className="zigzag-subtitle">
-              Registre gastos e visualize para onde seu dinheiro está indo. Com o Órion Finanças, a organização financeira é simples e prática, sem planilhas complexas ou categorias confusas. Você tem o controle total da sua vida financeira, de forma clara e sem estresse. 
+              Registre gastos e visualize para onde seu dinheiro está indo. Com o Órion Finanças, a organização financeira é simples e prática, sem planilhas complexas ou categorias confusas. Você tem o controle total da sua vida financeira, de forma clara e sem estresse.
             </p>
 
             <ul className="zigzag-checks">
-              <li><span className="check">✔</span>Categorize seus gastos</li>
-              <li><span className="check">✔</span>Veja padrões de consumo</li>
-              <li><span className="check">✔</span>Entenda seu comportamento financeiro</li>
+              <li><Check size={18} className="check" />Categorize seus gastos</li>
+              <li><Check size={18} className="check" />Veja padrões de consumo</li>
+              <li><Check size={18} className="check" />Entenda seu comportamento financeiro</li>
             </ul>
           </div>
 
@@ -225,9 +261,9 @@ export default function HomePage() {
             </p>
 
             <ul className="zigzag-checks">
-              <li><span className="check">✔</span>Crie metas financeiras</li>
-              <li><span className="check">✔</span>Acompanhe seu progresso</li>
-              <li><span className="check">✔</span>Mantenha consistência nos hábitos</li>
+              <li><Check size={18} className="check" />Crie metas financeiras</li>
+              <li><Check size={18} className="check" />Acompanhe seu progresso</li>
+              <li><Check size={18} className="check" />Mantenha consistência nos hábitos</li>
             </ul>
           </div>
 
@@ -270,9 +306,9 @@ export default function HomePage() {
             </p>
 
             <ul className="zigzag-checks">
-              <li><span className="check">✔</span>Conceitos simples e aplicáveis</li>
-              <li><span className="check">✔</span>Aprendizado por módulos</li>
-              <li><span className="check">✔</span>Evolução passo a passo</li>
+              <li><Check size={18} className="check" />Conceitos simples e aplicáveis</li>
+              <li><Check size={18} className="check" />Aprendizado por módulos</li>
+              <li><Check size={18} className="check" />Evolução passo a passo</li>
             </ul>
           </div>
 
@@ -336,7 +372,7 @@ export default function HomePage() {
         <div className="differences-grid">
           <div className="differences-list">
             <div className="diff-item">
-              <span className="diff-icon">📊</span>
+              <span className="diff-icon"><BarChart3 size={24} className="highlight" /></span>
               <div>
                 <h3>Controle de gastos</h3>
                 <p>Veja para onde seu dinheiro vai e ajuste com segurança.</p>
@@ -344,7 +380,7 @@ export default function HomePage() {
             </div>
 
             <div className="diff-item">
-              <span className="diff-icon">🎯</span>
+              <span className="diff-icon"><Target size={24} className="highlight" /></span>
               <div>
                 <h3>Metas e progresso</h3>
                 <p>Transforme objetivos em passos semanais e acompanhe evolução.</p>
@@ -352,7 +388,7 @@ export default function HomePage() {
             </div>
 
             <div className="diff-item">
-              <span className="diff-icon">🧾</span>
+              <span className="diff-icon"><BookOpen size={24} className="highlight" /></span>
               <div>
                 <h3>Conteúdo aplicável</h3>
                 <p>Você aprende e já aplica no mesmo dia — sem teoria infinita.</p>
@@ -362,7 +398,7 @@ export default function HomePage() {
 
           <div className="differences-list">
             <div className="diff-item">
-              <span className="diff-icon">🎓</span>
+              <span className="diff-icon"><GraduationCap size={24} className="highlight" /></span>
               <div>
                 <h3>Aprendizado gamificado</h3>
                 <p>Módulos curtos, claros e com evolução por níveis.</p>
@@ -370,7 +406,7 @@ export default function HomePage() {
             </div>
 
             <div className="diff-item">
-              <span className="diff-icon">🚀</span>
+              <span className="diff-icon"><Rocket size={24} className="highlight" /></span>
               <div>
                 <h3>Visão de futuro</h3>
                 <p>Hábitos financeiros que impactam sua vida inteira.</p>
@@ -378,7 +414,7 @@ export default function HomePage() {
             </div>
 
             <div className="diff-item">
-              <span className="diff-icon">🔒</span>
+              <span className="diff-icon"><ShieldCheck size={24} className="highlight" /></span>
               <div>
                 <h3>Sem complicação</h3>
                 <p>Interface simples e focada em clareza.</p>
@@ -399,10 +435,18 @@ export default function HomePage() {
             </p>
 
             <div className="preview-list">
-              <div className="preview-item">✅ Resumo do mês</div>
-              <div className="preview-item">✅ Trilhas e módulos</div>
-              <div className="preview-item">✅ Metas e hábitos</div>
-              <div className="preview-item">✅ Gamificação e evolução</div>
+              <div className="preview-item">
+                <CheckCircle2 size={16} className="highlight icon-inline" /> Resumo do mês
+              </div>
+              <div className="preview-item">
+                <CheckCircle2 size={16} className="highlight icon-inline" /> Trilhas e módulos
+              </div>
+              <div className="preview-item">
+                <CheckCircle2 size={16} className="highlight icon-inline" /> Metas e hábitos
+              </div>
+              <div className="preview-item">
+                <CheckCircle2 size={16} className="highlight icon-inline" /> Gamificação e evolução
+              </div>
             </div>
 
             <Link href="/register" className="btn-primary big">
