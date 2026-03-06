@@ -15,6 +15,10 @@
   margin-bottom: 1rem;
 }
 
+.titleHighlight {
+  color: var(--primary-color);
+}
+
 .subtitle {
   color: var(--text-secondary);
   font-size: 1.2rem;
@@ -47,7 +51,7 @@
 }
 
 .iconWrapper {
-  font-size: 2.5rem;
+  color: var(--primary-color);
   margin-bottom: 1.5rem;
 }
 
@@ -78,6 +82,34 @@
 .ctaSection p {
   color: var(--text-secondary);
   margin-bottom: 2rem;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.2rem;
+  border-radius: 10px;
+  border: none;
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ctaButton:hover {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.ctaButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-color);
 }
 
 @media (max-width: 768px) {
@@ -127,6 +159,9 @@
   border-radius: 12px;
   border: 1px solid var(--border-color);
   transition: 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .processSteps div:hover {
@@ -152,6 +187,19 @@
   flex-direction: column;
   gap: 0.8rem;
   font-size: 1.1rem;
+}
+
+.audienceSection li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.processIcon,
+.audienceIcon {
+  color: var(--primary-color);
+  flex-shrink: 0;
 }
 
 /* CTA MELHORADO */

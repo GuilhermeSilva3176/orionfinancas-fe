@@ -191,13 +191,17 @@
   border-radius: 18px;
   padding: 2rem;
   text-align: center;
-  transition: 0.25s ease;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
   align-self: start;
+  will-change: transform;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: var(--primary-color);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
 }
 
 .stat-card strong {
@@ -231,7 +235,7 @@
   margin-top: 1.2rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
-  animation: expand 0.25s ease;
+  animation: expand 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dropdown-content p {
@@ -258,7 +262,7 @@
 @keyframes expand {
   from {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-8px);
   }
 
   to {
@@ -786,4 +790,5 @@
     width: 100%;
     max-width: 320px;
   }
+
 }

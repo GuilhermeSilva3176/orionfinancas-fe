@@ -16,7 +16,14 @@ export default function MissionsPage() {
 
     return (
         <div className={styles.pageContainer}>
-            <div className={styles.headerTitle}>MISSÕES</div>
+            <header className={styles.pageHeader}>
+                <h1 className={styles.pageTitle}>
+                    Suas <span className={styles.pageHighlight}>Missões</span>
+                </h1>
+                <p className={styles.pageSubtitle}>
+                    Complete desafios em andamento para ganhar recompensas e acelerar seu progresso.
+                </p>
+            </header>
 
             <div className={styles.listContainer}>
                 <div className={styles.scrollableList}>

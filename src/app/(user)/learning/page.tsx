@@ -266,11 +266,11 @@ export default function Learning() {
   return (
     <div className={styles.modulesContainer}>
       <div className={styles.modulesShowcase}>
-        <header className={styles.studyIntro}>
-          <h1 className={styles.studyTitle}>
-            Sua <span className={styles.studyHighlight}>Área de Estudos</span>
+        <header className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>
+            Sua área de <span className={styles.pageHighlight}>Aprendizado</span>
           </h1>
-          <p className={styles.studySubtitle}>
+          <p className={styles.pageSubtitle}>
             Avance pelos módulos no seu ritmo, pratique com quizzes e acompanhe sua evolução.
           </p>
         </header>

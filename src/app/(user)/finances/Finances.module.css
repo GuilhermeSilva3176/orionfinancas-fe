@@ -22,6 +22,10 @@
     letter-spacing: -0.02em;
 }
 
+.pageHighlight {
+    color: var(--primary-color);
+}
+
 .pageSubtitle {
     color: var(--text-secondary);
     font-size: 1.1rem;

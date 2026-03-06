@@ -92,10 +92,11 @@ export default function FinancesPage() {
     return (
         <div className={styles.financesContainer}>
             <header className={styles.pageHeader}>
-                <h1 className={styles.pageTitle}>Seu Simulador Financeiro</h1>
+                <h1 className={styles.pageTitle}>
+                    Sua área de <span className={styles.pageHighlight}>Finanças</span>
+                </h1>
                 <p className={styles.pageSubtitle}>
-                    Pratique sua organização financeira em um ambiente de
-                    <b> aprendizado</b> seguro e intuitivo.
+                    Organize ganhos, despesas e metas em um painel claro para acompanhar sua evolução financeira.
                 </p>
             </header>
 
