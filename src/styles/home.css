@@ -47,7 +47,7 @@
   margin-top: 1rem;
 }
 
-/* ================= BOTÕES ================= */
+/* ================= BUTTONS ================= */
 .btn-primary {
   background: var(--primary-color);
   color: white;
@@ -102,7 +102,6 @@
   grid-template-columns: 1.2fr 0.8fr;
   gap: 3rem;
   align-items: center;
-  /* Centraliza verticalmente o texto com o card */
   max-width: 1100px;
   margin: 0 auto;
 }
@@ -192,13 +191,17 @@
   border-radius: 18px;
   padding: 2rem;
   text-align: center;
-  transition: 0.25s ease;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
   align-self: start;
+  will-change: transform;
 }
 
 .stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: var(--primary-color);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
 }
 
 .stat-card strong {
@@ -212,7 +215,6 @@
   color: var(--text-secondary);
 }
 
-/* espaço extra abaixo */
 .stats-bottom-space {
   height: 1.25rem;
 }
@@ -233,7 +235,7 @@
   margin-top: 1.2rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border-color);
-  animation: expand 0.25s ease;
+  animation: expand 0.38s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dropdown-content p {
@@ -260,7 +262,7 @@
 @keyframes expand {
   from {
     opacity: 0;
-    transform: translateY(-5px);
+    transform: translateY(-8px);
   }
 
   to {
@@ -313,7 +315,6 @@
   max-width: 52ch;
 }
 
-/* Lista com checks verdes */
 .zigzag-checks {
   list-style: none;
   padding: 0;
@@ -336,18 +337,14 @@
   color: var(--primary-color);
   flex-shrink: 0;
   margin-top: 0.15rem;
-  /* alinha visualmente com o texto */
 }
 
-
-/* Botões */
 .zigzag-actions {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* Mídia (GIF) */
 .zigzag-media {
   display: flex;
   justify-content: center;
@@ -606,7 +603,6 @@
   line-height: 1.6;
 }
 
-/* hover elegante sem virar card */
 .diff-item:hover h3 {
   color: var(--primary-color);
   transition: 0.2s ease;
@@ -768,7 +764,6 @@
 
 .cta-box p {
   margin-bottom: 1.5rem;
-  /* aumenta o espaço entre o texto e o botão */
 }
 
 
@@ -795,4 +790,5 @@
     width: 100%;
     max-width: 320px;
   }
+
 }

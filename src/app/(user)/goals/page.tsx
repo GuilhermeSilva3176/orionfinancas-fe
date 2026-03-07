@@ -108,7 +108,14 @@ export default function GoalsPage() {
 
     return (
         <div className={styles.pageContainer}>
-            <div className={styles.headerTitle}>METAS</div>
+            <header className={styles.pageHeader}>
+                <h1 className={styles.pageTitle}>
+                    Suas <span className={styles.pageHighlight}>Metas</span>
+                </h1>
+                <p className={styles.pageSubtitle}>
+                    Crie objetivos financeiros, acompanhe o progresso e mantenha consistência no seu planejamento.
+                </p>
+            </header>
 
             <div className={styles.listContainer}>
                 <div className={styles.scrollableList}>

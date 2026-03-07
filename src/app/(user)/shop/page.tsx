@@ -55,6 +55,15 @@ export default function ShopPage() {
 
     return (
         <div className={styles.shopContainer}>
+            <header className={styles.pageHeader}>
+                <h1 className={styles.pageTitle}>
+                    Sua <span className={styles.pageHighlight}>Loja</span>
+                </h1>
+                <p className={styles.pageSubtitle}>
+                    Use suas moedas para desbloquear itens visuais e recursos exclusivos da plataforma.
+                </p>
+            </header>
+
             <div
                 className={styles.banner}
                 onClick={() => setIsSubscriptionModalOpen(true)}

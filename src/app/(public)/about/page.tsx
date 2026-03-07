@@ -1,4 +1,12 @@
 import styles from "./About.module.css";
+import {
+  Target,
+  Globe2,
+  Gem,
+  Gamepad2,
+  BarChart3,
+  Rocket
+} from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -7,7 +15,7 @@ export default function AboutPage() {
       <section className={styles.heroAbout}>
         <h1 className={styles.title}>
           Construindo o futuro com o{" "}
-          <span className="highlight">Órion Finanças</span>
+          <span className={styles.titleHighlight}>Órion Finanças</span>
         </h1>
         <p className={styles.subtitle}>
           Educação financeira moderna, prática e acessível para a nova geração.
@@ -47,7 +55,10 @@ export default function AboutPage() {
       {/* ================= MISSÃO VISÃO VALORES ================= */}
       <section className={styles.valuesSection}>
         <div className={styles.valueCard}>
-          <h4>🎯 Missão</h4>
+          <h4 className={styles.valueTitle}>
+            <Target size={20} />
+            Missão
+          </h4>
           <p>
             Democratizar a educação financeira através da tecnologia,
             tornando o conhecimento acessível a todos.
@@ -55,7 +66,10 @@ export default function AboutPage() {
         </div>
 
         <div className={styles.valueCard}>
-          <h4>🌎 Visão</h4>
+          <h4 className={styles.valueTitle}>
+            <Globe2 size={20} />
+            Visão
+          </h4>
           <p>
             Ser referência em educação financeira digital para jovens na
             América Latina.
@@ -63,7 +77,10 @@ export default function AboutPage() {
         </div>
 
         <div className={styles.valueCard}>
-          <h4>💎 Valores</h4>
+          <h4 className={styles.valueTitle}>
+            <Gem size={20} />
+            Valores
+          </h4>
           <ul>
             <li>Transparência</li>
             <li>Clareza</li>
@@ -79,19 +96,19 @@ export default function AboutPage() {
 
         <div className={styles.differentialsGrid}>
           <div className={styles.diffCard}>
-            <span>🎮</span>
+            <span className={styles.diffIcon}><Gamepad2 size={30} /></span>
             <h4>Gamificação</h4>
             <p>Aprender finanças deixa de ser chato e vira progresso real.</p>
           </div>
 
           <div className={styles.diffCard}>
-            <span>📊</span>
+            <span className={styles.diffIcon}><BarChart3 size={30} /></span>
             <h4>Visual e prático</h4>
             <p>Controle financeiro sem planilhas complexas.</p>
           </div>
 
           <div className={styles.diffCard}>
-            <span>🚀</span>
+            <span className={styles.diffIcon}><Rocket size={30} /></span>
             <h4>Foco na juventude</h4>
             <p>Conteúdo pensado para quem está começando agora.</p>
           </div>
