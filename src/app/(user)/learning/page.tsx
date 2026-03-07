@@ -16,26 +16,32 @@ interface Modulo {
 
 const MODULOS: Modulo[] = [
   { id: 1, label: "MÓDULO 1", title: "Introdução ao dinheiro", status: "completed" },
-  {
-    id: 2,
-    label: "MÓDULO 2",
-    title: "Organização Financeira: Primeiros Passos",
-    status: "active",
-  },
-  { id: 3, label: "MÓDULO 3", title: "Conceitos Financeiros Essenciais", status: "locked" },
-  {
-    id: 4,
-    label: "MÓDULO 4",
-    title: "Créditos, Dívidas e Responsabilidade",
-    status: "locked",
-  },
+  { id: 2, label: "MÓDULO 2", title: "Organização financeira: Primeiros Passos", status: "active" },
+  { id: 3, label: "MÓDULO 3", title: "Conceitos Financeiros Essenciais", status: "active" },
+  { id: 4, label: "MÓDULO 4", title: "Créditos, Dívidas e Responsabilidade Financeira", status: "active" },
+  { id: 5, label: "MÓDULO 5", title: "Reserva de Emergência e Proteção", status: "active" },
+  { id: 6, label: "MÓDULO 6", title: "Trilha dos Investimentos: Renda Fixa", status: "active" },
+  { id: 7, label: "MÓDULO 7", title: "Trilha dos Investimentos: Renda Variável", status: "active" },
+  { id: 8, label: "MÓDULO 8", title: "Planejamento de Longo Prazo e Aposentadoria", status: "active" },
 ];
 
+const PlayIcon = () => (
+  <div className={styles.playIconContainer}>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  </div>
+);
+
+// Padrão de irregularidade para a trilha (Offsets horizontais em pixels)
+// REGRAS: Alternar entre negativo e positivo para evitar que fiquem no mesmo lado.
+const TRAIL_OFFSETS = [-120, 80, -50, 110, -20, 90, -70, 130, -30, 60, -90, 40];
 
 export default function Learning() {
   const [activeModule, setActiveModule] = useState<Modulo | null>(null);
   // Índice da lição no caminho (0 = lição 1, 1 = lição 2, ...)
   const [activeLessonIndex, setActiveLessonIndex] = useState(0);
+  const [isLessonViewOpen, setIsLessonViewOpen] = useState(false);
   // Fase da lição: conteúdo (treino) ou perguntas
   const [lessonPhase, setLessonPhase] = useState<"content" | "questions">("content");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -51,8 +57,14 @@ export default function Learning() {
   const handleBackToModules = () => {
     setActiveModule(null);
     setActiveLessonIndex(0);
+    setIsLessonViewOpen(false);
     setLessonPhase("content");
     setCurrentQuestionIndex(0);
+  };
+
+  const handleBackToTrail = () => {
+    setIsLessonViewOpen(false);
+    setLessonPhase("content");
   };
 
   const activeContent = activeModule ? getModuleById(activeModule.id) : null;
@@ -63,6 +75,7 @@ export default function Learning() {
 
   const handleLessonClick = (index: number) => {
     setActiveLessonIndex(index);
+    setIsLessonViewOpen(true);
     setLessonPhase("content");
     setCurrentQuestionIndex(0);
   };
@@ -77,9 +90,74 @@ export default function Learning() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((i) => i + 1);
     } else {
-      // Última pergunta desta lição concluída: volta para conteúdo (pode depois acionar animação/conclusão)
+      // Última pergunta desta lição concluída: volta para conteúdo
       setLessonPhase("content");
       setCurrentQuestionIndex(0);
+    }
+  };
+
+  /**
+   * Calcula o estilo dinâmico do conector entre a lição atual e a próxima
+   */
+  const getConnectorStyle = (index: number) => {
+    if (!lessons.length || index >= lessons.length - 1) return {};
+
+    const currentOffset = TRAIL_OFFSETS[index % TRAIL_OFFSETS.length];
+    const nextOffset = TRAIL_OFFSETS[(index + 1) % TRAIL_OFFSETS.length];
+
+    const width = Math.abs(nextOffset - currentOffset);
+    const minOffset = Math.min(currentOffset, nextOffset);
+
+    // VARIedade de curvas (0-2: L-Shape/Topo | 3: J-Shape/Baixo para o 7->8)
+    // Usamos o índice para forçar o formato J no step 7 (index 6) como no desenho
+    const isJPath = index === 6 || (index === 3); 
+
+    const baseStyle: React.CSSProperties = {
+      width: `${width}px`,
+      left: `calc(50% + ${minOffset}px)`,
+      height: "116px",
+    };
+
+    if (currentOffset < nextOffset) {
+      // Movimento: ESQUERDA -> DIREITA
+      if (isJPath) {
+        // J-Shape (Down then Right)
+        return {
+          ...baseStyle,
+          borderTop: "none",
+          borderRight: "none",
+          borderBottomLeftRadius: "50px",
+          top: "42px",
+        };
+      }
+      // L-Shape (Across then Down)
+      return {
+        ...baseStyle,
+        borderLeft: "none",
+        borderBottom: "none",
+        borderTopRightRadius: "50px",
+        top: "42px",
+      };
+    } else {
+      // Movimento: DIREITA -> ESQUERDA
+      if (isJPath) {
+        // J-Shape (Down then Left)
+        return {
+          ...baseStyle,
+          borderTop: "none",
+          borderLeft: "none",
+          borderBottomRightRadius: "50px",
+          top: "42px",
+        };
+      }
+      // L-Shape (Across then Down)
+      return {
+        ...baseStyle,
+        borderRight: "none",
+        borderBottom: "none",
+        borderTopLeftRadius: "50px",
+        top: "42px",
+      };
     }
   };
 
@@ -92,8 +170,72 @@ export default function Learning() {
   };
 
   // Tela do módulo: banner do módulo + caminho de lições (1-2-3-4)
-  // A aula (conteúdo + perguntas) aparece na própria página, abaixo da trilha.
   if (activeModule && activeContent && lessons.length > 0) {
+    if (isLessonViewOpen && currentLesson) {
+      return (
+        <div className={styles.studyViewContainer}>
+          <div className={styles.studyWrapper}>
+            <header className={styles.studyHeader}>
+              <span className={styles.studyModuleTitle}>{activeModule.label}</span>
+              <h2 className={styles.studyLessonTitle}>
+                Aula {activeLessonIndex + 1}: {currentLesson.tituloLicao}
+              </h2>
+            </header>
+
+            <section className={styles.studyCard}>
+              <div className={styles.studyLayout}>
+                <div className={styles.studyTextContent}>
+                  <p>{currentLesson.conteudo}</p>
+                  {currentLesson.bulletPoints && (
+                    <ul className={styles.studyBulletList}>
+                      {currentLesson.bulletPoints.map((point, i) => (
+                        <li key={i}>{point}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <div className={styles.studyImagePlaceholder}>
+                  {currentLesson.imageUrl ? (
+                    <div className={styles.placeholderBox} style={{ border: 'none', background: 'none' }}>
+                      <Image 
+                        src={currentLesson.imageUrl} 
+                        alt={currentLesson.tituloLicao} 
+                        width={400} 
+                        height={400} 
+                        className={styles.studyImage}
+                        style={{ borderRadius: '20px', objectFit: 'cover', width: '100%', height: '100%' }}
+                      />
+                    </div>
+                  ) : (
+                    <div className={styles.placeholderBox}>
+                      <span>Imagem Ilustrativa</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            <footer className={styles.studyActions}>
+              <button 
+                type="button" 
+                className={styles.studyBtnBack} 
+                onClick={handleBackToTrail}
+              >
+                voltar
+              </button>
+              <button 
+                type="button" 
+                className={styles.studyBtnNext} 
+                onClick={goToQuestions}
+              >
+                próximo
+              </button>
+            </footer>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={styles.modulesContainer}>
         <section className={styles.activeModuleContainer}>
@@ -108,155 +250,46 @@ export default function Learning() {
             </span>
           </header>
 
-          {/* Caminho de lições: trilha não reta, em zigue-zague */}
+          {/* Caminho de lições: trilha não reta, em zigue-zague conforme wireframe */}
           <div className={styles.trailPath}>
-            {lessons.map((_, index) => (
-              <div key={`lesson-${index}`} className={styles.trailStep}>
-                <button
-                  type="button"
-                  className={`${styles.trailNode} ${index === activeLessonIndex ? styles.trailNodeActive : ""
-                    } ${index % 2 === 0 ? styles.trailNodeLeft : styles.trailNodeRight}`}
-                  onClick={() => handleLessonClick(index)}
-                  aria-label={`Lição ${index + 1}`}
-                >
-                  {index + 1}
-                </button>
-                {index < lessons.length - 1 && (
-                  <div className={styles.trailConnector} aria-hidden />
-                )}
-              </div>
-            ))}
+            {lessons.map((lesson, index) => {
+              const nodeOffset = TRAIL_OFFSETS[index % TRAIL_OFFSETS.length];
+              return (
+                <div key={index} className={styles.trailStep}>
+                  <div 
+                    className={styles.nodeWrapper} 
+                    style={{ transform: `translateX(${nodeOffset}px)` }}
+                  >
+                    {index === activeLessonIndex && (
+                      <div className={`${styles.activeTooltip} ${styles.bounceAnimation}`}>
+                        Começar
+                        <div className={styles.tooltipArrow} />
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      className={`${styles.trailNode} ${
+                        index === activeLessonIndex ? styles.trailNodeActive : ""
+                      } ${
+                        index < activeLessonIndex ? styles.trailNodeCompleted : ""
+                      }`}
+                      onClick={() => handleLessonClick(index)}
+                      aria-label={`Lição ${index + 1}`}
+                    >
+                      {index + 1}
+                    </button>
+                  </div>
+                  {index < lessons.length - 1 && (
+                    <div 
+                      className={styles.simpleConnector} 
+                      style={getConnectorStyle(index)}
+                      aria-hidden 
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
-
-          {/* Área de conteúdo da lição + perguntas, na própria página */}
-          {currentLesson && (
-            <section className={styles.lessonInlineContainer}>
-              {lessonPhase === "content" && (
-                <div className={styles.lessonCardLarge}>
-                  <header className={styles.lessonCardHeader}>
-                    <span className={styles.lessonCardModule}>
-                      {activeModule.label} · Aula {activeLessonIndex + 1}
-                    </span>
-                    <h3 className={styles.lessonCardTitle}>{currentLesson.tituloLicao}</h3>
-                  </header>
-                  <div className={styles.lessonCardBody}>
-                    <div className={styles.lessonTextBlock}>
-                      <p>{currentLesson.conteudo}</p>
-                    </div>
-                    <div className={styles.lessonIllustrationBlock}>
-                      <span>Imagem ilustrativa / animação</span>
-                    </div>
-                  </div>
-                  <footer className={styles.lessonCardFooter}>
-                    <button
-                      type="button"
-                      className={styles.secondaryBtnWide}
-                      onClick={handleBackToModules}
-                    >
-                      Voltar para módulos
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.primaryBtnWide}
-                      onClick={goToQuestions}
-                      disabled={!questions.length}
-                    >
-                      Ir para perguntas
-                    </button>
-                  </footer>
-                </div>
-              )}
-
-              {lessonPhase === "questions" && currentQuestion && (
-                <div className={styles.quizCard}>
-                  {/* Área fixa para animação do personagem */}
-                  <div className={styles.animationBox}>
-                    <span>Área de animação do personagem (ataque/acerto/erro)</span>
-                  </div>
-
-                  {currentQuestion.type === "multipleChoice" && (
-                    <>
-                      <header className={styles.quizHeader}>
-                        <h3 className={styles.quizTitle}>Questão {currentQuestionIndex + 1}</h3>
-                        <p className={styles.quizSubtitle}>{currentQuestion.enunciado}</p>
-                      </header>
-                      <div className={styles.quizOptions}>
-                        {currentQuestion.alternativas.map((alt, idx) => (
-                          <button key={idx} type="button" className={styles.quizOptionButton}>
-                            {alt}
-                          </button>
-                        ))}
-                      </div>
-                    </>
-                  )}
-
-                  {currentQuestion.type === "connect" && (
-                    <>
-                      <header className={styles.quizHeader}>
-                        <h3 className={styles.quizTitle}>
-                          Questão {currentQuestionIndex + 1} - modelo de conectar respostas
-                        </h3>
-                        <p className={styles.quizSubtitle}>{currentQuestion.enunciado}</p>
-                      </header>
-                      <div className={styles.quizOptions}>
-                        {currentQuestion.alternativas.map((alt, idx) => (
-                          <button key={idx} type="button" className={styles.quizOptionButton}>
-                            {alt}
-                          </button>
-                        ))}
-                      </div>
-                    </>
-                  )}
-
-                  {currentQuestion.type === "matching" && (
-                    <>
-                      <header className={styles.quizHeader}>
-                        <h3 className={styles.quizTitle}>
-                          Questão {currentQuestionIndex + 1} - modelo de organizar respostas
-                        </h3>
-                        <p className={styles.quizSubtitle}>{currentQuestion.enunciado}</p>
-                      </header>
-                      <div className={styles.matchingGrid}>
-                        <div className={styles.matchingColumn}>
-                          <h4>Coluna A</h4>
-                          {currentQuestion.colunaA.map((item, idx) => (
-                            <button key={idx} type="button" className={styles.quizOptionButton}>
-                              {item}
-                            </button>
-                          ))}
-                        </div>
-                        <div className={styles.matchingColumn}>
-                          <h4>Coluna B</h4>
-                          {currentQuestion.colunaB.map((item, idx) => (
-                            <button key={idx} type="button" className={styles.quizOptionButton}>
-                              {item}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </>
-                  )}
-
-                  <footer className={styles.quizFooter}>
-                    <button
-                      type="button"
-                      className={styles.secondaryBtnWide}
-                      onClick={goToPreviousQuestion}
-                    >
-                      Pular / Voltar
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.primaryBtnWide}
-                      onClick={goToNextQuestion}
-                    >
-                      Verificar / Próxima
-                    </button>
-                  </footer>
-                </div>
-              )}
-            </section>
-          )}
         </section>
       </div>
     );
@@ -265,44 +298,47 @@ export default function Learning() {
   // Lista de módulos (tela inicial)
   return (
     <div className={styles.modulesContainer}>
-      <div className={styles.modulesShowcase}>
-        <header className={styles.pageHeader}>
-          <h1 className={styles.pageTitle}>
-            Sua área de <span className={styles.pageHighlight}>Aprendizado</span>
-          </h1>
-          <p className={styles.pageSubtitle}>
-            Avance pelos módulos no seu ritmo, pratique com quizzes e acompanhe sua evolução.
-          </p>
-        </header>
+      <header className={styles.learningHeader}>
+        <h2 className={styles.sectionTitle}>Módulos de Estudo</h2>
+        <p className={styles.sectionSubtitle}>Continue de onde você parou</p>
+      </header>
 
-        <div className={styles.modulesPath}>
-          {MODULOS.map((mod, index) => (
-            <div key={mod.id} className={styles.moduleWrapper}>
-              <div
-                className={`${styles.moduleCard} ${styles[mod.status]}`}
-                onClick={() => handleModuleClick(mod)}
-              >
-                <span className={styles.moduleHeader}>{mod.label}</span>
-                <h3 className={styles.moduleTitle}>{mod.title}</h3>
+      <div className={styles.modulesGrid}>
+        {MODULOS.map((mod) => {
+          const moduleData = getModuleById(mod.id);
+          const lessonCount = moduleData?.licoes.length ?? 0;
+          const itemCount = lessonCount * 4; // Média de 4 itens por lição
+
+          return (
+            <div
+              key={mod.id}
+              className={`${styles.modernModuleCard} ${mod.status === "locked" ? styles.locked : ""} ${mod.status === "completed" ? styles.completed : ""} ${mod.status === "active" ? styles.active : ""}`}
+              onClick={() => handleModuleClick(mod)}
+            >
+              <div className={styles.cardInfo}>
+                <span className={styles.cardLabel}>{mod.label}</span>
+                <h3 className={styles.cardTitle}>{mod.title}</h3>
+                <PlayIcon />
               </div>
-
-              {index < MODULOS.length - 1 && (
-                <div className={styles.arrowConn}>↓</div>
-              )}
+              
+              <div className={styles.cardStats}>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>{lessonCount}</span>
+                  <span className={styles.statLabel}>Aulas</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.statValue}>{itemCount}</span>
+                  <span className={styles.statLabel}>Items</span>
+                </div>
+                <div className={styles.statItem}>
+                  <span className={styles.progressValue}>
+                    {mod.status === "completed" ? "100%" : mod.status === "active" ? (mod.id === 2 ? "25%" : "0%") : "0%"}
+                  </span>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-
-        <div className={styles.moduleGifWrap}>
-          <Image
-            src="/assets/gifs/home/sprSketch3.gif"
-            alt="Mascote da área de módulos"
-            width={140}
-            height={233}
-            unoptimized
-            className={styles.moduleGif}
-          />
-        </div>
+          );
+        })}
       </div>
     </div>
   );
