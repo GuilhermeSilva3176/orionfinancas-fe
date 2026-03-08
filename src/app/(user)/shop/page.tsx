@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import { SubscriptionModal } from '@/components/shop/SubscriptionModal';
 import styles from './Shop.module.css';
 import { Coins } from 'lucide-react';
+import BuyConfirmModal from './components/BuyConfirmModal';
 
 export default function ShopPage() {
     const [selectedItem, setSelectedItem] = useState<any>(null);
     const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
 
-    const shopItems = [
+    const shopItems = useMemo(() => [
         { id: 1, name: "Ícone Clássico", price: 300, type: "icon", img: "/images/avatar.png" },
         { id: 2, name: "Ninja das Finanças", price: 500, type: "icon", img: "/images/avatar1.png" },
         { id: 3, name: "Socialite", price: 800, type: "icon", img: "/images/avatar2.png" },
@@ -34,22 +35,23 @@ export default function ShopPage() {
         { id: 22, name: "Master Invest", price: 1200, type: "icon", img: "/images/avatar3.png" },
         { id: 23, name: "Punk Rock", price: 600, type: "icon", img: "/images/avatar4.png" },
         { id: 24, name: "Astronauta", price: 1500, type: "icon", img: "/images/avatar5.png" },
-    ];
+    ], []);
 
-    const handleBuyClick = (item: any) => {
+    const handleBuyClick = useCallback((item: any) => {
         setSelectedItem(item);
-    };
+    }, []);
 
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         setSelectedItem(null);
-    };
+    }, []);
 
-    const confirmPurchase = () => {
+    const confirmPurchase = useCallback(() => {
+        if (!selectedItem) return;
         // Aqui viria a lógica de backend
         console.log("Comprado:", selectedItem);
         alert(`Você comprou: ${selectedItem.name}!`);
         setSelectedItem(null);
-    };
+    }, [selectedItem]);
 
     const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -104,40 +106,12 @@ export default function ShopPage() {
                 </div>
             </div>
 
-            {/* Modal de Confirmação */}
-            {selectedItem && (
-                <div className={styles.modalOverlay} onClick={closeModal}>
-                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <div className={styles.modalHeader}>
-                            <div className={styles.modalIcon}>
-                                <img src={selectedItem.img} alt={selectedItem.name} className={styles.modalImg} />
-                            </div>
-                            <h3 className={styles.modalTitle}>{selectedItem.name}</h3>
-                        </div>
-
-                        <div className={styles.modalBody}>
-                            <div className={styles.itemDetail}>
-                                <div className={styles.itemPrice}>
-                                    <Coins size={20} color="#ffb800" /> {selectedItem.price} moedas
-                                </div>
-                            </div>
-                            <p className={styles.confirmText}>
-                                Tem certeza que deseja adquirir este item?<br />
-                                <strong>Essa ação não pode ser desfeita.</strong>
-                            </p>
-                        </div>
-
-                        <div className={styles.modalFooter}>
-                            <button className={styles.cancelBtn} onClick={closeModal}>
-                                Cancelar
-                            </button>
-                            <button className={styles.confirmBtn} onClick={confirmPurchase}>
-                                Confirmar Compra
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <BuyConfirmModal
+                item={selectedItem}
+                isOpen={!!selectedItem}
+                onClose={closeModal}
+                onConfirm={confirmPurchase}
+            />
         </div>
     );
 }

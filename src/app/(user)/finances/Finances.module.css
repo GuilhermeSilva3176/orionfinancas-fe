@@ -213,8 +213,8 @@
 }
 
 .chartSection {
+    background: #111827; /* Solid fallback with slight tint */
     background: linear-gradient(165deg, #1e293b 0%, #0f172a 100%);
-    backdrop-filter: blur(20px);
     border-radius: 32px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 2rem;
@@ -223,26 +223,7 @@
     gap: 2rem;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.chartSection::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.08), transparent 60%);
-    pointer-events: none;
-}
-
-.chartSection::after {
-    content: '';
-    position: absolute;
-    bottom: -100px;
-    left: -50px;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle at center, rgba(239, 68, 68, 0.03), transparent 70%);
-    pointer-events: none;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
 }
 
 .chartTabs {
@@ -1048,8 +1029,7 @@
 .recordModalOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1115,7 +1095,6 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1211,7 +1190,6 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    backdrop-filter: blur(10px);
 }
 
 .historyTable td {
@@ -1362,8 +1340,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.92);
     display: flex;
     align-items: center;
     justify-content: center;

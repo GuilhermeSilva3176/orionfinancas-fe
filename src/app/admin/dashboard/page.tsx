@@ -1,20 +1,19 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Legend
-} from 'recharts';
+import dynamic from 'next/dynamic';
 import styles from './AdminDashboard.module.css';
+
+// Componentes extraídos com carregamento dinâmico para performance
+const AdminPieChart = dynamic(() => import('./components/AdminPieChart'), { 
+    ssr: false,
+    loading: () => <div style={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: 24 }}>Carregando gráfico de base...</div>
+});
+const AdminLineChart = dynamic(() => import('./components/AdminLineChart'), { 
+    ssr: false,
+    loading: () => <div style={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: 24 }}>Carregando histórico de usuários...</div>
+});
+const AdminHistoryModal = dynamic(() => import('./components/AdminHistoryModal'), { ssr: false });
 
 type DashboardView = 'resumo' | 'historico';
 
@@ -64,9 +63,6 @@ const recentAdminEvents = [
   }
 ];
 
-const formatMetric = (value: number | string): string =>
-  typeof value === 'number' ? value.toLocaleString('pt-BR') : String(value);
-
 export default function AdminDashboardPage() {
   const [view, setView] = useState<DashboardView>('resumo');
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
@@ -74,7 +70,6 @@ export default function AdminDashboardPage() {
   const activeUsers = historyData[historyData.length - 1].activeUsers;
   const newSignups = historyData[historyData.length - 1].newSignups;
   const reactivated = historyData[historyData.length - 1].reactivated;
-  const pendingApprovals = 96;
 
   const engagementRate = useMemo(() => {
     const totalBase = 1594;
@@ -90,19 +85,6 @@ export default function AdminDashboardPage() {
           tempo real.
         </p>
       </header>
-
-      <div className={styles.actionBanner}>
-        <div className={styles.actionText}>
-          <h3>Resumo de hoje</h3>
-          <p>
-            Acompanhe rapidamente crescimento da plataforma e pontos que exigem
-            intervenção.
-          </p>
-        </div>
-        <button className={styles.addStepBtn} type="button">
-          Exportar relatório
-        </button>
-      </div>
 
       <div className={styles.mainDashboard}>
         <div className={styles.chartSection}>
@@ -126,41 +108,7 @@ export default function AdminDashboardPage() {
           <div className={styles.chartDisplay}>
             {view === 'resumo' ? (
               <div className={styles.resumoView}>
-                <div className={styles.pieWrapper}>
-                  <ResponsiveContainer width="100%" height={320}>
-                    <PieChart>
-                      <Pie
-                        data={statusDistribution}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={90}
-                        outerRadius={115}
-                        paddingAngle={8}
-                        dataKey="value"
-                        stroke="none"
-                      >
-                        {statusDistribution.map((entry) => (
-                          <Cell key={entry.name} fill={entry.color} stroke="none" />
-                        ))}
-                      </Pie>
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#1e293b',
-                          border: '1px solid rgba(255,255,255,0.1)',
-                          borderRadius: '10px',
-                          padding: '8px 12px',
-                          fontSize: '13px'
-                        }}
-                        itemStyle={{ color: '#fff', padding: '2px 0' }}
-                        formatter={(value: number | string) => formatMetric(value)}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div className={styles.chartCenterInfo}>
-                    <span className={styles.centerLabel}>Base Ativa</span>
-                    <span className={styles.centerValue}>{activeUsers}</span>
-                  </div>
-                </div>
+                <AdminPieChart data={statusDistribution} activeUsers={activeUsers} />
 
                 <div className={styles.resumoContext}>
                   <h4>Situação atual da base</h4>
@@ -177,82 +125,30 @@ export default function AdminDashboardPage() {
                 </div>
               </div>
             ) : (
-              <div className={styles.historyWrapper}>
-                <ResponsiveContainer width="100%" height={320}>
-                  <LineChart data={historyData} margin={{ top: 20, right: 10, left: -10, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.06)" />
-                    <XAxis
-                      dataKey="month"
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
-                    />
-                    <YAxis
-                      axisLine={false}
-                      tickLine={false}
-                      tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
-                    />
-                    <Tooltip
-                      cursor={{ stroke: 'rgba(255,255,255,0.2)' }}
-                      contentStyle={{
-                        backgroundColor: '#1e293b',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '12px'
-                      }}
-                      formatter={(value: number | string) => formatMetric(value)}
-                    />
-                    <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '13px' }} />
-                    <Line
-                      type="monotone"
-                      name="Usuários ativos"
-                      dataKey="activeUsers"
-                      stroke="#2dd4bf"
-                      strokeWidth={3}
-                      dot={{ r: 4 }}
-                    />
-                    <Line
-                      type="monotone"
-                      name="Novos cadastros"
-                      dataKey="newSignups"
-                      stroke="#60a5fa"
-                      strokeWidth={3}
-                      dot={{ r: 4 }}
-                    />
-                    <Line
-                      type="monotone"
-                      name="Reativados"
-                      dataKey="reactivated"
-                      stroke="#f59e0b"
-                      strokeWidth={3}
-                      dot={{ r: 4 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+                <AdminLineChart data={historyData} />
             )}
           </div>
         </div>
 
-        <aside className={styles.sideMetrics}>
+        <div className={styles.metricsGrid}>
           <div className={styles.balanceCard}>
             <span className={styles.balanceLabel}>Usuários ativos (mês)</span>
             <h2 className={styles.balanceValue}>{activeUsers}</h2>
             <p className={styles.balanceHint}>+124 em relação ao mês anterior</p>
           </div>
 
-          <div className={styles.metricGroup}>
-            <div className={styles.miniMetric}>
-              <span className={styles.miniLabel}>Novos</span>
-              <span className={styles.miniValue} style={{ color: '#60a5fa' }}>
-                {newSignups}
-              </span>
-            </div>
-            <div className={styles.miniMetric}>
-              <span className={styles.miniLabel}>Reativados</span>
-              <span className={styles.miniValue} style={{ color: '#f59e0b' }}>
-                {reactivated}
-              </span>
-            </div>
+          <div className={styles.miniMetric}>
+            <span className={styles.miniLabel}>Novos</span>
+            <span className={styles.miniValue} style={{ color: '#60a5fa' }}>
+              {newSignups}
+            </span>
+          </div>
+
+          <div className={styles.miniMetric}>
+            <span className={styles.miniLabel}>Reativados</span>
+            <span className={styles.miniValue} style={{ color: '#f59e0b' }}>
+              {reactivated}
+            </span>
           </div>
 
           <div className={styles.primeCard}>
@@ -268,17 +164,7 @@ export default function AdminDashboardPage() {
               <p>Meta definida: 80% de atividade recorrente.</p>
             </div>
           </div>
-
-          <div className={styles.eduCard}>
-            <div>
-              <h5>Pendências de aprovação</h5>
-              <p>
-                {pendingApprovals} cadastros aguardando validação. Priorize os
-                perfis com mais de 24h em análise.
-              </p>
-            </div>
-          </div>
-        </aside>
+        </div>
       </div>
 
       <div className={styles.recentSection}>
@@ -327,74 +213,11 @@ export default function AdminDashboardPage() {
         </div>
       </div>
 
-      {isHistoryModalOpen && (
-        <div
-          className={styles.modalOverlay}
-          onClick={() => setIsHistoryModalOpen(false)}
-        >
-          <div
-            className={styles.modalContent}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <header className={styles.modalHeader}>
-              <h2>Histórico Administrativo</h2>
-              <button
-                className={styles.closeButton}
-                onClick={() => setIsHistoryModalOpen(false)}
-                type="button"
-                aria-label="Fechar modal"
-              >
-                &times;
-              </button>
-            </header>
-
-            <div className={styles.modalBody}>
-              <table className={styles.historyTable}>
-                <thead>
-                  <tr>
-                    <th>Evento</th>
-                    <th>Descrição</th>
-                    <th>Tipo</th>
-                    <th>Data/Hora</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentAdminEvents.map((event) => (
-                    <tr key={event.id}>
-                      <td style={{ fontWeight: 700 }}>{event.title}</td>
-                      <td>{event.details}</td>
-                      <td>
-                        <span
-                          className={`${styles.typeIndicator} ${
-                            event.type === 'warning'
-                              ? styles.typeWarning
-                              : event.type === 'info'
-                                ? styles.typeInfo
-                                : styles.typeSuccess
-                          }`}
-                        >
-                          {event.type === 'warning'
-                            ? 'Atenção'
-                            : event.type === 'info'
-                              ? 'Informativo'
-                              : 'Sucesso'}
-                        </span>
-                      </td>
-                      <td>{event.date}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <footer className={styles.modalFooter}>
-              <span className={styles.footerNote}>
-                Exibindo todas as atividades administrativas registradas neste ambiente.
-              </span>
-            </footer>
-          </div>
-        </div>
-      )}
+      <AdminHistoryModal 
+        isOpen={isHistoryModalOpen} 
+        onClose={() => setIsHistoryModalOpen(false)} 
+        events={recentAdminEvents} 
+      />
     </div>
   );
 }
