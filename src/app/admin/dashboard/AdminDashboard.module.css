@@ -70,10 +70,9 @@
 }
 
 .mainDashboard {
-  display: grid;
-  grid-template-columns: 1fr 320px;
+  display: flex;
+  flex-direction: column;
   gap: 1.5rem;
-  align-items: stretch;
   width: 100%;
 }
 
@@ -123,7 +122,7 @@
   grid-template-columns: 320px 1fr;
   gap: 3rem;
   align-items: center;
-  padding-top: 1rem;
+  padding: 1rem 3rem;
 }
 
 .pieWrapper {
@@ -200,10 +199,22 @@
   padding-top: 1rem;
 }
 
-.sideMetrics {
-  display: flex;
-  flex-direction: column;
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .metricsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .balanceCard {
@@ -245,25 +256,27 @@
 }
 
 .miniMetric {
-  background: var(--dark-surface);
+  background: linear-gradient(135deg, var(--dark-surface), rgba(255, 255, 255, 0.02));
   border: 1px solid var(--border-color);
-  padding: 1rem;
-  border-radius: 16px;
+  padding: 1.5rem;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
 .miniLabel {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   font-weight: 700;
+  letter-spacing: 0.1em;
 }
 
 .miniValue {
-  font-size: 1.1rem;
+  font-size: 2.2rem;
   font-weight: 800;
+  margin: 0.2rem 0;
 }
 
 .primeCard {
@@ -445,8 +458,7 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -526,7 +538,6 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(10px);
 }
 
 .historyTable td {

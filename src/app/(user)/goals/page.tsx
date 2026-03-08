@@ -1,7 +1,9 @@
 
 "use client";
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import styles from '../UserLists.module.css';
+import GoalModal from './components/GoalModal';
+import DeleteGoalModal from './components/DeleteGoalModal';
 
 export default function GoalsPage() {
     const [goals, setGoals] = useState([
@@ -12,25 +14,17 @@ export default function GoalsPage() {
 
     const [currentBalance, setCurrentBalance] = useState(1500.00);
 
+    const [initialData, setInitialData] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [goalToDelete, setGoalToDelete] = useState<any>(null);
 
-    const [formData, setFormData] = useState({
-        title: '',
-        current: '',
-        target: '',
-        date: '',
-        description: '',
-        urgency: 'medium',
-    });
-
-    const openCreateModal = () => {
+    const openCreateModal = useCallback(() => {
         setIsEditing(false);
         setEditingId(null);
-        setFormData({
+        setInitialData({
             title: '',
             current: '0',
             target: '',
@@ -39,26 +33,18 @@ export default function GoalsPage() {
             urgency: 'medium',
         });
         setIsModalOpen(true);
-    };
+    }, []);
 
-    const openEditModal = (goal: any) => {
+    const openEditModal = useCallback((goal: any) => {
         setIsEditing(true);
         setEditingId(goal.id);
-        setFormData({
-            title: goal.title,
-            current: goal.current.toString(),
-            target: goal.target.toString(),
-            date: goal.date || '',
-            description: goal.description || '',
-            urgency: goal.urgency || 'medium',
-        });
+        setInitialData(goal);
         setIsModalOpen(true);
-    };
+    }, []);
 
-    const handleSaveGoal = (e: React.FormEvent) => {
-        e.preventDefault();
-        const targetVal = parseFloat(formData.target) || 0;
-        const currentVal = parseFloat(formData.current) || 0;
+    const handleSaveGoal = useCallback((data: any) => {
+        const targetVal = parseFloat(data.target) || 0;
+        const currentVal = parseFloat(data.current) || 0;
 
         if (isEditing && editingId !== null) {
             const oldGoal = goals.find(g => g.id === editingId);
@@ -66,45 +52,45 @@ export default function GoalsPage() {
                 const diff = currentVal - oldGoal.current;
                 setCurrentBalance(prev => prev - diff);
 
-                setGoals(goals.map(g => g.id === editingId ? {
+                setGoals(prev => prev.map(g => g.id === editingId ? {
                     ...g,
-                    title: formData.title,
+                    title: data.title,
                     current: currentVal,
                     target: targetVal,
-                    date: formData.date,
-                    description: formData.description,
-                    urgency: formData.urgency,
+                    date: data.date,
+                    description: data.description,
+                    urgency: data.urgency,
                 } : g));
             }
         } else {
             setCurrentBalance(prev => prev - currentVal);
             const newGoalItem = {
                 id: Date.now(),
-                title: formData.title,
+                title: data.title,
                 current: currentVal,
                 target: targetVal,
-                date: formData.date,
-                description: formData.description,
-                urgency: formData.urgency,
+                date: data.date,
+                description: data.description,
+                urgency: data.urgency,
             };
-            setGoals([...goals, newGoalItem]);
+            setGoals(prev => [...prev, newGoalItem]);
         }
         setIsModalOpen(false);
-    };
+    }, [isEditing, editingId, goals]);
 
-    const openDeleteModal = (goal: any) => {
+    const openDeleteModal = useCallback((goal: any) => {
         setGoalToDelete(goal);
         setIsDeleteModalOpen(true);
-    };
+    }, []);
 
-    const confirmDeleteGoal = () => {
+    const confirmDeleteGoal = useCallback(() => {
         if (goalToDelete) {
             setCurrentBalance(prev => prev + goalToDelete.current);
-            setGoals(goals.filter(g => g.id !== goalToDelete.id));
+            setGoals(prev => prev.filter(g => g.id !== goalToDelete.id));
             setIsDeleteModalOpen(false);
             setGoalToDelete(null);
         }
-    };
+    }, [goalToDelete]);
 
     return (
         <div className={styles.pageContainer}>
@@ -181,133 +167,21 @@ export default function GoalsPage() {
                 </button>
             </div>
 
-            {isModalOpen && (
-                <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
-                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <h3 className={styles.modalTitle}>{isEditing ? 'Gerenciar Meta' : 'Nova Meta'}</h3>
+            <GoalModal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                isEditing={isEditing}
+                currentBalance={currentBalance}
+                initialData={initialData}
+                onSubmit={handleSaveGoal}
+            />
 
-                        <div className={styles.goalModalHeaderRow}>
-                            <div className={styles.balanceBox}>
-                                <span className={styles.balanceLabel}>Saldo da conta</span>
-                                <span className={styles.balanceValue}>R$ {currentBalance.toFixed(2).replace('.', ',')}</span>
-                            </div>
-                            <div className={styles.urgencyBox}>
-                                <span className={styles.urgencyLabel}>Prioridade</span>
-                                <div className={styles.urgencyOptions}>
-                                    <button
-                                        className={`${styles.urgencyPill} ${styles.urgencyLow} ${formData.urgency === 'low' ? styles.urgencySelected : ''}`}
-                                        onClick={() => setFormData({ ...formData, urgency: 'low' })}
-                                    >Baixa</button>
-                                    <button
-                                        className={`${styles.urgencyPill} ${styles.urgencyMedium} ${formData.urgency === 'medium' ? styles.urgencySelected : ''}`}
-                                        onClick={() => setFormData({ ...formData, urgency: 'medium' })}
-                                    >Média</button>
-                                    <button
-                                        className={`${styles.urgencyPill} ${styles.urgencyHigh} ${formData.urgency === 'high' ? styles.urgencySelected : ''}`}
-                                        onClick={() => setFormData({ ...formData, urgency: 'high' })}
-                                    >Alta</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <form onSubmit={handleSaveGoal}>
-                            <div className={styles.formGroup}>
-                                <label>Título da Meta</label>
-                                <input
-                                    type="text"
-                                    className={styles.formInput}
-                                    placeholder="Ex: Viagem de Férias"
-                                    value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    required
-                                />
-                            </div>
-
-                            <div className={styles.formGrid}>
-                                <div className={styles.formGroup}>
-                                    <label>Dinheiro reservado (R$)</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        className={styles.formInput}
-                                        style={{ color: 'var(--primary-color)', fontWeight: 700 }}
-                                        value={formData.current}
-                                        onChange={(e) => setFormData({ ...formData, current: e.target.value })}
-                                    />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Valor Alvo (R$)</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        className={styles.formInput}
-                                        value={formData.target}
-                                        onChange={(e) => setFormData({ ...formData, target: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className={styles.formGrid}>
-                                <div className={styles.formGroup}>
-                                    <label>Data Limite</label>
-                                    <input
-                                        type="date"
-                                        className={styles.formInput}
-                                        value={formData.date}
-                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                    />
-                                </div>
-                                <div className={styles.formGroup} style={{ opacity: formData.target ? 1 : 0.5 }}>
-                                    <label>Resumo de Progresso</label>
-                                    <div className={styles.formInput} style={{ background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', fontWeight: 700, fontSize: '0.9rem' }}>
-                                        {formData.target ? `${Math.round(((parseFloat(formData.current) || 0) / (parseFloat(formData.target) || 1)) * 100)}% concluído` : 'Defina o alvo'}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label>Descrição (opcional)</label>
-                                <textarea
-                                    className={styles.formInput}
-                                    style={{ minHeight: '80px', resize: 'none' }}
-                                    placeholder="Detalhes sobre sua meta..."
-                                    value={formData.description}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                />
-                            </div>
-
-                            <div className={styles.modalFooter}>
-                                <button type="button" className={styles.cancelBtn} onClick={() => setIsModalOpen(false)}>Cancelar</button>
-                                <button type="submit" className={styles.confirmBtn}>Salvar Alterações</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {isDeleteModalOpen && (
-                <div className={styles.modalOverlay} onClick={() => setIsDeleteModalOpen(false)}>
-                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px', textAlign: 'center' }}>
-                        <div className={styles.deleteWarningIcon}>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                                <line x1="12" y1="9" x2="12" y2="13" />
-                                <line x1="12" y1="17" x2="12.01" y2="17" />
-                            </svg>
-                        </div>
-                        <h3 className={styles.modalTitle} style={{ color: '#ef4444' }}>Excluir Meta</h3>
-                        <p className={styles.depositText} style={{ marginBottom: '2rem' }}>
-                            Tem certeza que deseja excluir <strong>"{goalToDelete?.title}"</strong>?<br />
-                            <span style={{ fontSize: '0.85rem', opacity: 0.7 }}>O dinheiro reservado voltará para seu saldo.</span>
-                        </p>
-                        <div className={styles.modalFooter}>
-                            <button className={styles.cancelBtn} onClick={() => setIsDeleteModalOpen(false)}>Manter Meta</button>
-                            <button className={`${styles.confirmBtn} ${styles.deleteConfirmBtn}`} onClick={confirmDeleteGoal}>Sim, Excluir</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <DeleteGoalModal 
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                goalTitle={goalToDelete?.title || ''}
+                onConfirm={confirmDeleteGoal}
+            />
         </div>
     );
 }

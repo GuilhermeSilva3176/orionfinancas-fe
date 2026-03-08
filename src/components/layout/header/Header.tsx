@@ -7,9 +7,10 @@ import { useState, useRef, useEffect } from "react"
 
 interface HeaderProps {
   variant?: 'public' | 'logged';
+  homeHref?: string;
 }
 
-export function Header({ variant = 'public' }: HeaderProps) {
+export function Header({ variant = 'public', homeHref }: HeaderProps) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const notificationsRef = useRef<HTMLDivElement | null>(null);
 
@@ -54,7 +55,7 @@ export function Header({ variant = 'public' }: HeaderProps) {
     <header className={`${styles.header} ${styles[variant]}`}>
       <div className={styles.container}>
         <div className={styles.headerContent}>
-          <Link href={variant === 'logged' ? '/learning' : '/'} className={styles.logo}>
+          <Link href={homeHref ?? (variant === 'logged' ? '/learning' : '/')} className={styles.logo}>
             <span className={styles.logoText}>Órion Finanças</span>
           </Link>
 

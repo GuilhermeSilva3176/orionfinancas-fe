@@ -342,8 +342,7 @@
 }
 
 .statsCard {
-    background: rgba(30, 41, 59, 0.5);
-    backdrop-filter: blur(10px);
+    background: #1e293b;
     border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 1rem;
     border-radius: 16px;
@@ -774,8 +773,7 @@
 .modalOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,9 +1,30 @@
-
 "use client";
 
-import { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import styles from './Finances.module.css';
+import AddTransactionModal from './components/AddTransactionModal';
+import HistoryModal from './components/HistoryModal';
+import WelcomeModal from './components/WelcomeModal';
+import EditTransactionModal from './components/EditTransactionModal';
+import DeleteConfirmModal from './components/DeleteConfirmModal';
+
+const MonthlyChart = dynamic(() => import('./components/MonthlyChart'), { 
+    ssr: false,
+    loading: () => <div style={{ height: 320, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: 24 }}>Carregando gráfico...</div>
+});
+const HistoryChart = dynamic(() => import('./components/HistoryChart'), { 
+    ssr: false,
+    loading: () => <div style={{ height: 320, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: 24 }}>Carregando histórico...</div>
+});
+interface Transaction {
+    id: number;
+    type: 'ganho' | 'gasto';
+    title: string;
+    amount: number;
+    date: string;
+    category: string;
+}
 
 export default function FinancesPage() {
     const [view, setView] = useState<'resumo' | 'historico'>('resumo');
@@ -18,26 +39,18 @@ export default function FinancesPage() {
         }
     }, []);
 
-    const closeWelcome = () => {
+    const closeWelcome = useCallback(() => {
         setShowWelcome(false);
         localStorage.setItem('seen_finances_welcome', 'true');
-    };
+    }, []);
 
     // Estados para Edição/Exclusão
-    const [editingTx, setEditingTx] = useState<any>(null);
+    const [editingTx, setEditingTx] = useState<Transaction | null>(null);
     const [deletingTxId, setDeletingTxId] = useState<number | null>(null);
 
-    // Estado para novo registro
-    const [newTx, setNewTx] = useState({
-        type: 'gasto' as 'ganho' | 'gasto',
-        title: '',
-        amount: '',
-        category: '',
-        date: new Date().toLocaleDateString('pt-BR')
-    });
 
     // Mock inicial transformado em estado para refletir edições/exclusões
-    const [transactions, setTransactions] = useState([
+    const [transactions, setTransactions] = useState<Transaction[]>([
         { id: 1, type: 'gasto', title: 'Assinatura Spotify', amount: 21.90, date: '04/03/2026', category: 'Lazer' },
         { id: 2, type: 'ganho', title: 'Freelance Design', amount: 1500.00, date: '02/03/2026', category: 'Trabalho' },
         { id: 3, type: 'gasto', title: 'Mercado Central', amount: 156.40, date: '01/03/2026', category: 'Alimentação' },
@@ -50,57 +63,50 @@ export default function FinancesPage() {
     ]);
 
     // Cálculo dinâmico baseado no estado
-    const totalIncome = transactions.filter(t => t.type === 'ganho').reduce((acc, t) => acc + t.amount, 0);
-    const totalExpensesByCtx = transactions.filter(t => t.type === 'gasto').reduce((acc, t) => acc + t.amount, 0);
-    const balance = totalIncome - totalExpensesByCtx - 750;
+    const totals = useMemo(() => {
+        const income = transactions.filter(t => t.type === 'ganho').reduce((acc: number, t: Transaction) => acc + t.amount, 0);
+        const expenses = transactions.filter(t => t.type === 'gasto').reduce((acc: number, t: Transaction) => acc + t.amount, 0);
+        return { income, expenses, balance: income - expenses - 750 };
+    }, [transactions]);
 
-    const pieData = [
-        { name: 'Ganhos', value: totalIncome, color: 'var(--primary-color)' },
+    const { income: totalIncome, expenses: totalExpensesByCtx, balance } = totals;
+
+    const pieData = useMemo(() => [
+        { name: 'Ganhos', value: totalIncome, color: '#2dd4bf' },
         { name: 'Gastos', value: totalExpensesByCtx, color: '#ef4444' },
         { name: 'Metas', value: 750, color: '#eab308' },
-    ];
+    ], [totalIncome, totalExpensesByCtx]);
 
-    const historyData = [
+    const historyData = useMemo(() => [
         { month: 'Set', ganhos: 3200, gastos: 2100 },
         { month: 'Out', ganhos: 3500, gastos: 1800 },
         { month: 'Nov', ganhos: 3100, gastos: 2400 },
         { month: 'Dez', ganhos: 4200, gastos: 2900 },
         { month: 'Jan', ganhos: 3800, gastos: 1500 },
         { month: 'Fev', ganhos: totalIncome, gastos: totalExpensesByCtx },
-    ];
+    ], [totalIncome, totalExpensesByCtx]);
 
     // Handlers
-    const confirmDelete = () => {
+    const confirmDelete = useCallback(() => {
         if (deletingTxId) {
-            setTransactions(transactions.filter(t => t.id !== deletingTxId));
+            setTransactions(prev => prev.filter(t => t.id !== deletingTxId));
             setDeletingTxId(null);
         }
-    };
+    }, [deletingTxId]);
 
-    const saveEdit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setTransactions(transactions.map(t => t.id === editingTx.id ? editingTx : t));
+    const saveEdit = useCallback((updatedTx: any) => {
+        setTransactions(prev => prev.map(t => t.id === updatedTx.id ? updatedTx : t));
         setEditingTx(null);
-    };
+    }, []);
 
-    const handleAddTx = (e: React.FormEvent) => {
-        e.preventDefault();
-        const payload = {
-            id: transactions.length + 1,
-            ...newTx,
-            amount: parseFloat(newTx.amount) || 0,
-            date: new Date().toLocaleDateString('pt-BR')
+    const handleAddTx = useCallback((payload: any) => {
+        const fullPayload = {
+            id: Date.now(),
+            ...payload
         };
-        setTransactions([payload, ...transactions]);
+        setTransactions(prev => [fullPayload, ...prev]);
         setIsAddModalOpen(false);
-        setNewTx({
-            type: 'gasto',
-            title: '',
-            amount: '',
-            category: '',
-            date: new Date().toLocaleDateString('pt-BR')
-        });
-    };
+    }, []);
 
     return (
         <div className={styles.financesContainer}>
@@ -185,68 +191,11 @@ export default function FinancesPage() {
                                         </div>
                                     </div>
 
-                                    <div className={styles.pieWrapper}>
-                                        <ResponsiveContainer width="100%" height={320}>
-                                            <PieChart>
-                                                <Pie
-                                                    data={pieData}
-                                                    cx="50%"
-                                                    cy="50%"
-                                                    innerRadius={95}
-                                                    outerRadius={125}
-                                                    paddingAngle={8}
-                                                    dataKey="value"
-                                                    stroke="none"
-                                                >
-                                                    {pieData.map((entry, index) => (
-                                                        <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
-                                                    ))}
-                                                </Pie>
-                                                <Tooltip
-                                                    contentStyle={{
-                                                        backgroundColor: '#1e293b',
-                                                        border: '1px solid rgba(255,255,255,0.1)',
-                                                        borderRadius: '10px',
-                                                        padding: '8px 12px',
-                                                        fontSize: '13px'
-                                                    }}
-                                                    itemStyle={{ color: '#fff', padding: '2px 0' }}
-                                                    formatter={(value: any) => `R$ ${parseFloat(value).toFixed(2).replace('.', ',')}`}
-                                                />
-                                            </PieChart>
-                                        </ResponsiveContainer>
-                                        <div className={styles.chartCenterInfo}>
-                                            <span className={styles.centerLabel}>Seu Foco</span>
-                                            <span className={styles.centerValue}>Equilíbrio</span>
-                                        </div>
-                                    </div>
+                                    <MonthlyChart data={pieData} />
                                 </div>
                             ) : (
                                 <div className={styles.historyWrapper}>
-                                    <ResponsiveContainer width="100%" height={320}>
-                                        <BarChart data={historyData} margin={{ top: 20, right: 10, left: -20, bottom: 0 }}>
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                                            <XAxis
-                                                dataKey="month"
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
-                                            />
-                                            <YAxis
-                                                axisLine={false}
-                                                tickLine={false}
-                                                tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
-                                            />
-                                            <Tooltip
-                                                cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                                                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
-                                                formatter={(value: any) => `R$ ${value}`}
-                                            />
-                                            <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '13px' }} />
-                                            <Bar name="Ganhos" dataKey="ganhos" fill="#2dd4bf" radius={[6, 6, 0, 0]} barSize={20} />
-                                            <Bar name="Gastos" dataKey="gastos" fill="#ef4444" radius={[6, 6, 0, 0]} barSize={20} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                                    <HistoryChart data={historyData} />
                                 </div>
                             )}
                         </div>
@@ -286,7 +235,7 @@ export default function FinancesPage() {
                 </div>
 
                 <div className={styles.activityList}>
-                    {transactions.slice(0, 4).map((tx) => (
+                    {transactions.slice(0, 4).map((tx: Transaction) => (
                         <div key={tx.id} className={styles.activityItem}>
                             <div className={styles.activityIcon} style={{ background: tx.type === 'ganho' ? 'rgba(45, 212, 191, 0.1)' : 'rgba(239, 68, 68, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 {tx.type === 'ganho' ? (
@@ -314,268 +263,38 @@ export default function FinancesPage() {
             </div>
 
             {/* Modal de Registro de Nova Movimentação */}
-            {
-                isAddModalOpen && (
-                    <div className={styles.modalOverlay} onClick={() => setIsAddModalOpen(false)}>
-                        <div className={styles.modalContent} style={{ maxWidth: '480px' }} onClick={(e) => e.stopPropagation()}>
-                            <header className={styles.modalHeader}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.7 }}>
-                                        <path d="M12 5v14M5 12l7 7 7-7" />
-                                    </svg>
-                                    <h2>Nova Movimentação</h2>
-                                </div>
-                                <button className={styles.closeButton} onClick={() => setIsAddModalOpen(false)}>&times;</button>
-                            </header>
-                            <div className={styles.modalBody} style={{ padding: '2rem' }}>
-                                <form className={styles.editForm} onSubmit={handleAddTx}>
-                                    <div className={styles.formGroup}>
-                                        <label>Tipo de Registro</label>
-                                        <div className={styles.typeSelectGroup}>
-                                            <button
-                                                type="button"
-                                                className={`${styles.typeOption} ${newTx.type === 'ganho' ? styles.activeGanho : ''}`}
-                                                onClick={() => setNewTx({ ...newTx, type: 'ganho' })}
-                                            >
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polyline points="7 7 17 7 17 17"></polyline>
-                                                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                                                </svg>
-                                                Entrada
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className={`${styles.typeOption} ${newTx.type === 'gasto' ? styles.activeGasto : ''}`}
-                                                onClick={() => setNewTx({ ...newTx, type: 'gasto' })}
-                                            >
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polyline points="17 17 7 17 7 7"></polyline>
-                                                    <line x1="17" y1="7" x2="7" y2="17"></line>
-                                                </svg>
-                                                Saída
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.formGroup}>
-                                        <label>Título da Transação</label>
-                                        <div className={styles.inputWithIcon}>
-                                            <div className={styles.inputIcon}>
-                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <path d="M12 20h9"></path>
-                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                                                </svg>
-                                            </div>
-                                            <input
-                                                required
-                                                className={styles.formInput}
-                                                placeholder="Ex: Aluguel, Salário, Mercado..."
-                                                value={newTx.title}
-                                                onChange={e => setNewTx({ ...newTx, title: e.target.value })}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.formRow2}>
-                                        <div className={styles.formGroup}>
-                                            <label>Valor</label>
-                                            <div className={styles.inputWithIcon}>
-                                                <span className={styles.inputIcon} style={{ fontSize: '0.8rem', fontWeight: 800 }}>R$</span>
-                                                <input
-                                                    required
-                                                    type="number"
-                                                    step="0.01"
-                                                    className={styles.formInput}
-                                                    placeholder="0,00"
-                                                    value={newTx.amount}
-                                                    onChange={e => setNewTx({ ...newTx, amount: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className={styles.formGroup}>
-                                            <label>Categoria</label>
-                                            <input
-                                                required
-                                                className={styles.formInput}
-                                                placeholder="Ex: Lazer"
-                                                value={newTx.category}
-                                                onChange={e => setNewTx({ ...newTx, category: e.target.value })}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.confirmActions} style={{ marginTop: '1rem' }}>
-                                        <button type="button" className={styles.cancelBtn} onClick={() => setIsAddModalOpen(false)}>Cancelar</button>
-                                        <button type="submit" className={styles.dangerBtn} style={{ background: 'var(--primary-color)' }}>Finalizar Registro</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
+            <AddTransactionModal 
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                onAdd={handleAddTx}
+            />
 
             {/* Modal de Histórico Completo */}
-            {
-                isHistoryModalOpen && (
-                    <div className={styles.modalOverlay} onClick={() => setIsHistoryModalOpen(false)}>
-                        <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                            <header className={styles.modalHeader}>
-                                <h2>Histórico de Movimentações</h2>
-                                <button className={styles.closeButton} onClick={() => setIsHistoryModalOpen(false)}>&times;</button>
-                            </header>
-                            <div className={styles.modalBody}>
-                                <table className={styles.historyTable}>
-                                    <thead>
-                                        <tr>
-                                            <th>Tipo</th>
-                                            <th>Título / Categoria</th>
-                                            <th>Valor</th>
-                                            <th>Data</th>
-                                            <th style={{ textAlign: 'right' }}>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {transactions.map((tx) => (
-                                            <tr key={tx.id}>
-                                                <td>
-                                                    <span className={`${styles.typeIndicator} ${tx.type === 'ganho' ? styles.typeGanho : styles.typeGasto}`}>
-                                                        {tx.type === 'ganho' ? 'Ganho' : 'Gasto'}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <div style={{ fontWeight: 700 }}>{tx.title}</div>
-                                                    <div style={{ fontSize: '0.8rem', opacity: 0.6 }}>{tx.category}</div>
-                                                </td>
-                                                <td style={{ fontWeight: 800, color: tx.type === 'ganho' ? '#2dd4bf' : '#ef4444' }}>
-                                                    {tx.type === 'ganho' ? '+' : '-'} R$ {tx.amount.toFixed(2).replace('.', ',')}
-                                                </td>
-                                                <td style={{ color: 'var(--text-secondary)' }}>{tx.date}</td>
-                                                <td>
-                                                    <div className={styles.actionsCell}>
-                                                        <button
-                                                            className={`${styles.actionIconBtn} ${styles.editBtn}`}
-                                                            onClick={() => setEditingTx(tx)}
-                                                            title="Editar"
-                                                        >
-                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                            </svg>
-                                                        </button>
-                                                        <button
-                                                            className={`${styles.actionIconBtn} ${styles.deleteBtn}`}
-                                                            onClick={() => setDeletingTxId(tx.id)}
-                                                            title="Excluir"
-                                                        >
-                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <footer className={styles.modalFooter}>
-                                <span className={styles.footerNote}>Exibindo todas as transações (Ambiente Sandbox).</span>
-                            </footer>
-                        </div>
-                    </div>
-                )
-            }
+            <HistoryModal 
+                isOpen={isHistoryModalOpen}
+                onClose={() => setIsHistoryModalOpen(false)}
+                transactions={transactions}
+                onEdit={setEditingTx}
+                onDelete={setDeletingTxId}
+            />
 
             {/* Modal de Confirmação de Exclusão */}
-            {
-                deletingTxId && (
-                    <div className={styles.confirmModalOverlay}>
-                        <div className={styles.confirmModalContent}>
-                            <div className={styles.confirmIcon} style={{ color: '#ef4444', display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
-                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                </svg>
-                            </div>
-                            <h3 className={styles.confirmTitle}>Excluir Transação?</h3>
-                            <p className={styles.confirmDesc}>Esta ação não pode ser desfeita. O valor será removido permanentemente dos cálculos.</p>
-                            <div className={styles.confirmActions}>
-                                <button className={styles.cancelBtn} onClick={() => setDeletingTxId(null)}>Cancelar</button>
-                                <button className={styles.dangerBtn} onClick={confirmDelete}>Sim, Excluir</button>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
+            <DeleteConfirmModal 
+                isOpen={!!deletingTxId}
+                onClose={() => setDeletingTxId(null)}
+                onConfirm={confirmDelete}
+            />
 
             {/* Modal de Edição */}
-            {
-                editingTx && (
-                    <div className={styles.confirmModalOverlay}>
-                        <div className={styles.confirmModalContent} style={{ maxWidth: '450px' }}>
-                            <h3 className={styles.confirmTitle}>Editar Movimentação</h3>
-                            <form className={styles.editForm} onSubmit={saveEdit}>
-                                <div className={styles.formGroup}>
-                                    <label>Título</label>
-                                    <input
-                                        className={styles.formInput}
-                                        value={editingTx.title}
-                                        onChange={e => setEditingTx({ ...editingTx, title: e.target.value })}
-                                    />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Valor (R$)</label>
-                                    <input
-                                        type="number"
-                                        step="0.01"
-                                        className={styles.formInput}
-                                        value={editingTx.amount}
-                                        onChange={e => setEditingTx({ ...editingTx, amount: parseFloat(e.target.value) })}
-                                    />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Categoria</label>
-                                    <input
-                                        className={styles.formInput}
-                                        value={editingTx.category}
-                                        onChange={e => setEditingTx({ ...editingTx, category: e.target.value })}
-                                    />
-                                </div>
-                                <div className={styles.confirmActions} style={{ marginTop: '1rem' }}>
-                                    <button type="button" className={styles.cancelBtn} onClick={() => setEditingTx(null)}>Cancelar</button>
-                                    <button type="submit" className={styles.dangerBtn} style={{ background: 'var(--primary-color)' }}>Salvar Alterações</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )
-            }
+            <EditTransactionModal 
+                isOpen={!!editingTx}
+                transaction={editingTx}
+                onClose={() => setEditingTx(null)}
+                onSave={saveEdit}
+            />
+
             {/* Modal de Boas-vindas (Onboarding) */}
-            {
-                showWelcome && (
-                    <div className={styles.confirmModalOverlay} style={{ zIndex: 4000 }}>
-                        <div className={styles.welcomeModalContent}>
-                            <div className={styles.welcomeIcon}>
-                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                </svg>
-                            </div>
-                            <h2 className={styles.welcomeTitle}>
-                                Bem-vindo à sua área de <span className={styles.pageHighlight}>Finanças</span>
-                            </h2>
-                            <p className={styles.welcomeDesc}>
-                                Organize seus ganhos, despesas e metas em um painel claro e inteligente para acompanhar sua evolução financeira em tempo real.
-                            </p>
-                            <button className={styles.primaryBtnWide} onClick={closeWelcome} style={{ marginTop: '1rem', padding: '1.2rem' }}>
-                                Começar agora
-                            </button>
-                        </div>
-                    </div>
-                )
-            }
+            <WelcomeModal isOpen={showWelcome} onClose={closeWelcome} />
         </div >
     );
 }

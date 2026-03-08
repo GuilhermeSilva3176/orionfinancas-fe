@@ -1,21 +1,27 @@
-
 "use client";
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { ArrowLeft, Trash2, X, AlertTriangle } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import styles from './Settings.module.css';
+import DeleteAccountModal from './components/DeleteAccountModal';
+import UpdatePlanModal from './components/UpdatePlanModal';
 
 export default function SettingsPage() {
     const [activeTab, setActiveTab] = useState('profile');
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
 
-    const handleDeleteAccount = () => {
+    const handleDeleteAccount = useCallback(() => {
         // Lógica de exclusão aqui
         alert("Conta excluída com sucesso.");
         window.location.href = '/';
-    };
+    }, []);
+
+    const handleUpgradePlan = useCallback(() => {
+        alert("Upgrade solicitado para o Plano Anual!");
+        setIsPlanModalOpen(false);
+    }, []);
 
     return (
         <div className={styles.settingsContainer}>
@@ -128,79 +134,17 @@ export default function SettingsPage() {
                 </main>
             </div>
 
-            {/* Change Plan Modal */}
-            {isPlanModalOpen && (
-                <div className={styles.modalOverlay} onClick={() => setIsPlanModalOpen(false)}>
-                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                        <div className={styles.modalHeader}>
-                            <h2>Mudar para Plano Anual</h2>
-                            <button className={styles.closeModal} onClick={() => setIsPlanModalOpen(false)}>
-                                <X size={24} />
-                            </button>
-                        </div>
-                        <div className={styles.modalBody}>
-                            <p className={styles.modalSub}>Economize mais de 20% mudando para o pagamento anual!</p>
+            <UpdatePlanModal 
+                isOpen={isPlanModalOpen}
+                onClose={() => setIsPlanModalOpen(false)}
+                onConfirm={handleUpgradePlan}
+            />
 
-                            <div className={styles.premiumPlanCard}>
-                                <div className={styles.planItemHeader}>
-                                    <span className={styles.planItemTitle}>Plano Anual</span>
-                                    <span className={styles.planItemPrice}>R$ 289,90/ano</span>
-                                </div>
-                                <span className={styles.planSavings}>Equivale a R$ 24,15 por mês</span>
-
-                                <ul className={styles.planFeatures}>
-                                    <li><span className={styles.featureCheck}>✓</span> Vidas ilimitadas</li>
-                                    <li><span className={styles.featureCheck}>✓</span> Sem anúncios</li>
-                                    <li><span className={styles.featureCheck}>✓</span> Cursos exclusivos de investimento</li>
-                                </ul>
-                            </div>
-
-                            <button className={styles.upgradeBtn} onClick={() => {
-                                alert("Upgrade solicitado para o Plano Anual!");
-                                setIsPlanModalOpen(false);
-                            }}>
-                                Confirmar Upgrade Anual
-                            </button>
-                        </div>
-                        <div className={styles.modalFooterNote}>
-                            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                                O valor será cobrado imediatamente no seu cartão padrão.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Delete Account Modal */}
-            {isDeleteModalOpen && (
-                <div className={styles.modalOverlay} onClick={() => setIsDeleteModalOpen(false)}>
-                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                        <div className={styles.modalHeader}>
-                            <h2 style={{ color: '#ff6464' }}>Excluir Conta</h2>
-                            <button className={styles.closeModal} onClick={() => setIsDeleteModalOpen(false)}>
-                                <X size={24} />
-                            </button>
-                        </div>
-                        <div className={styles.modalBody}>
-                            <div className={styles.warningIcon}>
-                                <AlertTriangle size={48} color="#ff6464" />
-                            </div>
-                            <p className={styles.confirmText}>
-                                Tem certeza que deseja <strong>excluir permanentemente</strong> sua conta?<br />
-                                Todos os seus dados, lições e conquistas serão perdidos para sempre.
-                            </p>
-                        </div>
-                        <div className={styles.modalFooter}>
-                            <button className={styles.secondaryBtn} onClick={() => setIsDeleteModalOpen(false)}>
-                                Cancelar
-                            </button>
-                            <button className={styles.deleteConfirmBtn} onClick={handleDeleteAccount}>
-                                Excluir Permanentemente
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <DeleteAccountModal 
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={handleDeleteAccount}
+            />
         </div>
     );
 }

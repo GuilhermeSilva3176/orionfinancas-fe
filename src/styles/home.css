@@ -628,6 +628,13 @@
   padding: 2.5rem;
 }
 
+.preview.preview-no-card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
 .preview-grid {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
@@ -635,15 +642,39 @@
   align-items: center;
 }
 
+.preview-grid.plans-table-grid {
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
 .preview-text h2 {
   font-size: 2rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .preview-text p {
   color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 1.25rem;
+}
+
+.plans-intro-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-bottom: 3.4rem;
+}
+
+.plans-intro-copy p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 100ch;
+}
+
+.plans-intro-copy strong {
+  color: var(--text-primary);
 }
 
 .preview-list {
@@ -662,6 +693,223 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
+}
+
+.plans-table-section {
+  margin: 0.8rem 0 3.8rem;
+}
+
+.plans-table-section h3 {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.65rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.plans-table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.plans-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: none;
+}
+
+.plans-table th,
+.plans-table td {
+  padding: 0.85rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.plans-table thead th {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.plans-table thead th:nth-child(2),
+.plans-table thead th:nth-child(3),
+.plans-table thead th:nth-child(4) {
+  color: var(--primary-color);
+}
+
+.plans-table thead th:first-child {
+  border-top-left-radius: 14px;
+}
+
+.plans-table thead th:last-child {
+  border-top-right-radius: 14px;
+}
+
+.plans-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 14px;
+}
+
+.plans-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 14px;
+}
+
+.plans-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.plans-table tbody td {
+  color: var(--text-secondary);
+}
+
+.plans-table tbody td:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.plans-table-note {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.plans-offer-cards {
+  margin-top: 0;
+  margin-bottom: 2.2rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.plan-offer-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.plan-offer-card.monthly {
+  border-color: var(--border-color);
+}
+
+.plan-offer-card.annual {
+  border-color: var(--border-color);
+}
+
+.plan-offer-card:hover,
+.plan-offer-card:focus-within {
+  border-color: rgba(0, 200, 150, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(0, 200, 150, 0.25),
+    0 12px 30px rgba(0, 200, 150, 0.2),
+    0 0 18px rgba(0, 200, 150, 0.2);
+  transform: translateY(-2px);
+}
+
+.plan-offer-badge {
+  align-self: flex-start;
+  background: rgba(0, 200, 150, 0.16);
+  color: var(--primary-color);
+  border: 1px solid rgba(0, 200, 150, 0.35);
+  border-radius: 10px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 0.95rem;
+}
+
+.plan-offer-brand {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}
+
+.plan-offer-name {
+  margin: 0.2rem 0 0;
+  font-size: 2rem;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.plan-offer-price-main {
+  margin: 0.5rem 0 0;
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.plan-offer-price-sub {
+  margin: 0.25rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+}
+
+.plan-offer-divider {
+  margin: 1rem 0 0.8rem;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.plan-offer-features {
+  list-style: disc;
+  padding-left: 1rem;
+  margin: 0 0 1.25rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 138px;
+}
+
+.plan-offer-primary,
+.plan-offer-secondary {
+  border-radius: 999px;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 700;
+  padding: 0.8rem 1rem;
+  transition: all 0.2s ease;
+}
+
+.plan-offer-primary {
+  background: var(--primary-color);
+  color: #081510;
+}
+
+.plan-offer-primary:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.plan-offer-secondary {
+  margin-top: 0.65rem;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.plan-offer-secondary:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.plan-offer-note {
+  margin: 1rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1180px) {
+  .plans-offer-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .preview-mock {
@@ -746,26 +994,31 @@
   border-radius: 999px;
 }
 
-/* ================= CTA ================= */
+/* ================= FINAL CTA ================= */
 .final-cta {
   display: flex;
   justify-content: center;
 }
 
 .cta-box {
-  background: var(--dark-surface);
-  border: 1px solid var(--border-color);
-  border-radius: 24px;
-  padding: 4rem;
+  max-width: 760px;
   text-align: center;
-  max-width: 600px;
-  max-height: 500px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.cta-box h2 {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  margin-bottom: 0.75rem;
 }
 
 .cta-box p {
-  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 1.4rem;
 }
-
 
 /* ================= RESPONSIVO ================= */
 @media (max-width: 900px) {
@@ -783,6 +1036,18 @@
 
   .preview-list {
     grid-template-columns: 1fr;
+  }
+
+  .plans-offer-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .plans-intro-copy {
+    margin-bottom: 2.2rem;
+  }
+
+  .plans-table-section {
+    margin: 0.45rem 0 2.4rem;
   }
 
   .hero-buttons {

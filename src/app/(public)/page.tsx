@@ -135,43 +135,167 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= ESTATÍSTICAS (PROBLEMA) ================= */}
-      <section className="stats-section">
-        <div className="stats-intro">
-          <h2>O problema é real — e começa cedo</h2>
-          <p>
-            Muitos brasileiros vivem no limite do orçamento e grande parte dos
-            jovens não tem rotina financeira. Clique nos cards para ver detalhes
-            e a fonte.
-          </p>
-        </div>
-
-        <div className="stats-grid">
-          {stats.map((stat, index) => (
-            <div
-              key={index}
-              className={`stat-card dropdown ${openIndex === index ? "open" : ""}`}
-              onClick={() => toggleCard(index)}
-            >
-              <div className="stat-header">
-                <strong>{stat.percentage}</strong>
-                <span>{stat.short}</span>
-              </div>
-
-              {openIndex === index && (
-                <div className="dropdown-content">
-                  <p>{stat.full}</p>
-                  <a href={stat.source} target="_blank" rel="noopener noreferrer">
-                    Acessar fonte completa
-                  </a>
-                </div>
-              )}
+      {/* ================= PLANOS E ASSINATURA ================= */}
+      <section className="preview preview-no-card">
+        <div className="preview-grid plans-table-grid">
+          <div className="preview-text">
+            <h2>Planos para sua jornada financeira</h2>
+            <div className="plans-intro-copy">
+              <p>
+                Comece no plano gratuito e evolua para a assinatura quando
+                quiser acelerar seus resultados com mais recursos e
+                acompanhamento.
+              </p>
+              <p>
+                Com a assinatura Premium, você libera recursos avançados,
+                conteúdo exclusivo e mais profundidade no acompanhamento das
+                suas metas. Você pode escolher entre o plano mensal para
+                flexibilidade ou anual para melhor custo-benefício.
+              </p>
             </div>
-          ))}
-        </div>
 
-        {/* espaço extra abaixo para não empurrar a seção seguinte */}
-        <div className="stats-bottom-space" />
+            <div className="plans-table-section">
+              <h3>Comparativo de planos</h3>
+              <div className="plans-table-scroll">
+                <table className="plans-table" aria-label="Comparativo de planos">
+                  <thead>
+                    <tr>
+                      <th>Recursos</th>
+                      <th>Gratuito</th>
+                      <th>Mensal</th>
+                      <th>Anual</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Preço</td>
+                      <td>R$ 0,00</td>
+                      <td>R$ 29,90/mês</td>
+                      <td>R$ 299,00/ano*</td>
+                    </tr>
+                    <tr>
+                      <td>Registro de gastos e receitas</td>
+                      <td>Sim</td>
+                      <td>Sim</td>
+                      <td>Sim</td>
+                    </tr>
+                    <tr>
+                      <td>Visualização básica da vida financeira</td>
+                      <td>Sim</td>
+                      <td>Sim</td>
+                      <td>Sim</td>
+                    </tr>
+                    <tr>
+                      <td>Sem anúncios</td>
+                      <td>Não</td>
+                      <td>Sim</td>
+                      <td>Sim</td>
+                    </tr>
+                    <tr>
+                      <td>Metas personalizadas e acompanhamento detalhado</td>
+                      <td>Não</td>
+                      <td>Sim</td>
+                      <td>Sim</td>
+                    </tr>
+                    <tr>
+                      <td>Cursos exclusivos de investimento</td>
+                      <td>Não</td>
+                      <td>Sim</td>
+                      <td>Sim</td>
+                    </tr>
+                    <tr>
+                      <td>Vidas ilimitadas</td>
+                      <td>Não</td>
+                      <td>Não</td>
+                      <td>Sim</td>
+                    </tr>
+                    <tr>
+                      <td>Economia no plano anual</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td>Economize 2 meses</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="plans-table-note">
+                * Em telas de upgrade, pode aparecer oferta de R$ 289,90/ano.
+              </p>
+            </div>
+
+            <div className="plans-offer-cards" aria-label="Planos em destaque">
+              <article className="plan-offer-card free">
+                <div className="plan-offer-badge">R$ 0 para começar</div>
+                <p className="plan-offer-brand">Órion Finanças</p>
+                <h4 className="plan-offer-name">Gratuito</h4>
+                <p className="plan-offer-price-main">R$ 0,00</p>
+                <p className="plan-offer-price-sub">Sem cobrança recorrente</p>
+                <div className="plan-offer-divider" />
+                <ul className="plan-offer-features">
+                  <li>Registro de gastos e receitas</li>
+                  <li>Visualização básica da vida financeira</li>
+                  <li>Trilhas introdutórias de educação financeira</li>
+                </ul>
+                <Link href="/register" className="plan-offer-primary">
+                  Criar conta grátis
+                </Link>
+                <Link href="/login" className="plan-offer-secondary">
+                  Já tenho conta
+                </Link>
+                <p className="plan-offer-note">
+                  Ideal para iniciar sua organização financeira sem compromisso.
+                </p>
+              </article>
+
+              <article className="plan-offer-card monthly">
+                <div className="plan-offer-badge">Mais popular</div>
+                <p className="plan-offer-brand">Órion Finanças Premium</p>
+                <h4 className="plan-offer-name">Mensal</h4>
+                <p className="plan-offer-price-main">R$ 29,90/mês</p>
+                <p className="plan-offer-price-sub">Cancele quando quiser</p>
+                <div className="plan-offer-divider" />
+                <ul className="plan-offer-features">
+                  <li>Sem anúncios</li>
+                  <li>Metas personalizadas e acompanhamento detalhado</li>
+                  <li>Cursos exclusivos de investimento</li>
+                </ul>
+                <Link href="/register" className="plan-offer-primary">
+                  Assinar plano mensal
+                </Link>
+                <Link href="/register" className="plan-offer-secondary">
+                  Ver formas de pagamento
+                </Link>
+                <p className="plan-offer-note">
+                  Pagamento via cartão ou Pix. Acesso completo enquanto ativo.
+                </p>
+              </article>
+
+              <article className="plan-offer-card annual">
+                <div className="plan-offer-badge">Melhor custo-benefício</div>
+                <p className="plan-offer-brand">Órion Finanças Premium</p>
+                <h4 className="plan-offer-name">Anual</h4>
+                <p className="plan-offer-price-main">R$ 299,00/ano</p>
+                <p className="plan-offer-price-sub">Equivale a R$ 24,92/mês</p>
+                <div className="plan-offer-divider" />
+                <ul className="plan-offer-features">
+                  <li>Tudo do plano mensal</li>
+                  <li>Economize 2 meses no valor anual</li>
+                  <li>Oferta em upgrade pode chegar a R$ 289,90/ano</li>
+                </ul>
+                <Link href="/register" className="plan-offer-primary">
+                  Assinar plano anual
+                </Link>
+                <Link href="/register" className="plan-offer-secondary">
+                  Comparar com mensal
+                </Link>
+                <p className="plan-offer-note">
+                  Recomendado para manter evolução financeira contínua ao longo do ano.
+                </p>
+              </article>
+            </div>
+
+          </div>
+        </div>
       </section>
 
       {/* ================= CONTROLE FINANCEIRO (ZIG-ZAG) ================= */}
@@ -424,78 +548,50 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ================= PREVIEW DO DASHBOARD ================= */}
-      <section className="preview">
-        <div className="preview-grid">
-          <div className="preview-text">
-            <h2>Veja como é por dentro</h2>
-            <p>
-              Um dashboard limpo, com foco no que importa: progresso de estudo,
-              metas e visão geral financeira.
-            </p>
-
-            <div className="preview-list">
-              <div className="preview-item">
-                <CheckCircle2 size={16} className="highlight icon-inline" /> Resumo do mês
-              </div>
-              <div className="preview-item">
-                <CheckCircle2 size={16} className="highlight icon-inline" /> Trilhas e módulos
-              </div>
-              <div className="preview-item">
-                <CheckCircle2 size={16} className="highlight icon-inline" /> Metas e hábitos
-              </div>
-              <div className="preview-item">
-                <CheckCircle2 size={16} className="highlight icon-inline" /> Gamificação e evolução
-              </div>
-            </div>
-
-            <Link href="/register" className="btn-primary big">
-              Quero acessar o dashboard
-            </Link>
-          </div>
-
-          <div className="preview-mock">
-            <div className="mock-top">
-              <span className="dot" />
-              <span className="dot" />
-              <span className="dot" />
-            </div>
-
-            <div className="mock-body">
-              <div className="mock-card">
-                <p className="mock-title">Progresso</p>
-                <div className="mock-bar">
-                  <div className="mock-fill" />
-                </div>
-                <p className="mock-sub">Módulo 2 • 45%</p>
-              </div>
-
-              <div className="mock-row">
-                <div className="mock-mini">
-                  <p className="mock-title">Gastos</p>
-                  <p className="mock-value">R$ 680</p>
-                </div>
-                <div className="mock-mini">
-                  <p className="mock-title">Metas</p>
-                  <p className="mock-value">3/5</p>
-                </div>
-              </div>
-
-              <div className="mock-card">
-                <p className="mock-title">Próxima aula</p>
-                <p className="mock-sub">Organização Financeira • 10 min</p>
-              </div>
-            </div>
-          </div>
+      {/* ================= ESTATÍSTICAS (PROBLEMA) ================= */}
+      <section className="stats-section">
+        <div className="stats-intro">
+          <h2>O problema é real — e começa cedo</h2>
+          <p>
+            Muitos brasileiros vivem no limite do orçamento e grande parte dos
+            jovens não tem rotina financeira. Clique nos cards para ver detalhes
+            e a fonte.
+          </p>
         </div>
+
+        <div className="stats-grid">
+          {stats.map((stat, index) => (
+            <div
+              key={index}
+              className={`stat-card dropdown ${openIndex === index ? "open" : ""}`}
+              onClick={() => toggleCard(index)}
+            >
+              <div className="stat-header">
+                <strong>{stat.percentage}</strong>
+                <span>{stat.short}</span>
+              </div>
+
+              {openIndex === index && (
+                <div className="dropdown-content">
+                  <p>{stat.full}</p>
+                  <a href={stat.source} target="_blank" rel="noopener noreferrer">
+                    Acessar fonte completa
+                  </a>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* espaço extra abaixo para não empurrar a seção seguinte */}
+        <div className="stats-bottom-space" />
       </section>
 
-      {/* ================= CTA FINAL ================= */}
       <section className="final-cta">
         <div className="cta-box">
           <h2>Seu futuro financeiro começa hoje</h2>
           <p>
-            Não espere ganhar mais para começar — comece agora a organizar sua vida financeira.
+            Não espere ganhar mais para começar. Comece agora a organizar sua vida financeira.
           </p>
           <Link href="/register" className="btn-primary big">
             Criar conta grátis
