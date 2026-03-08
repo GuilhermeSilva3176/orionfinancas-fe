@@ -42,7 +42,7 @@ export default function AdminLayout({
 
   return (
     <div className={styles.adminWrapper}>
-      <Header variant="logged" />
+      <Header variant="logged" homeHref="/admin/dashboard" />
 
       <div className={styles.appLayout}>
         <aside className={styles.sidebarLeft}>
